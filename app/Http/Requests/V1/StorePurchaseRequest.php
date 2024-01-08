@@ -23,11 +23,12 @@ class StorePurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "vendor_id" => ["required"],
+            "vendorId" => ["required"],
             "prNumber" => ["required"],
-            "prDate" => ["required", "date_format:Y-m-d H:i:s"],
+            "status" => ["required",  Rule::in(['PR', 'PO'])],
+            "prDate" => ["required", "date_format:Y-m-d"],
             "poNumber" => ["nullable"],
-            "poDate" => ["nullable", "date_format:Y-m-d H:i:s"],
+            "poDate" => ["nullable", "date_format:Y-m-d"],
         ];
     }
 

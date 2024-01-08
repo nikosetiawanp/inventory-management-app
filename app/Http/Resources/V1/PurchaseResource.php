@@ -21,6 +21,9 @@ class PurchaseResource extends JsonResource
             "prDate" => $this->pr_date,
             "poNumber" => $this->po_number,
             "poDate" => $this->po_date,
+            "status" => $this->status,
+            "vendor" => new VendorResource($this->whenLoaded("vendor")),
+            "items" => ItemResource::collection($this->whenLoaded("items")),
         ];
     }
 }

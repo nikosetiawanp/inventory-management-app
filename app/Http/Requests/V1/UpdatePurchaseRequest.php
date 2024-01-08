@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
 
 class UpdatePurchaseRequest extends FormRequest
 {
@@ -24,20 +26,32 @@ class UpdatePurchaseRequest extends FormRequest
         $method = $this->method();
         if ($method === "PUT") {
             return [
-                "vendor_id" => ["required"],
+                "vendorId" => ["required"],
+                "status" => ["required",  Rule::in(['PR', 'PO'])],
                 "prNumber" => ["required"],
-                "prDate" => ["required", "date_format:Y-m-d H:i:s"],
+                "prDate" => ["required", "date_format:Y-m-d"],
                 "poNumber" => ["nullable"],
-                "poDate" => ["nullable", "date_format:Y-m-d H:i:s"],
+                "poDate" => ["nullable", "date_format:Y-m-d"],
             ];
         } else {
             return [
-                "vendor_id" => ["sometimes", "required"],
+                "vendorId" => ["sometimes", "required"],
+                "status" => ["required",  Rule::in(['PR', 'PO'])],
                 "prNumber" => ["sometimes", "required"],
-                "prDate" => ["sometimes", "required", "date_format:Y-m-d H:i:s"],
+                "prDate" => ["sometimes", "required", "date_format:Y-m-d"],
                 "poNumber" => ["sometimes", "nullable"],
-                "poDate" => ["sometimes", "nullable", "date_format:Y-m-d H:i:s"],
+                "poDate" => ["sometimes", "nullable", "date_format:Y-m-d"],
             ];
         }
+    }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            "vendor_id" => $this->vendorId,
+            "pr_number" => $this->prNumber,
+            "pr_date" => $this->prDate,
+            "po_number" => $this->poNumber,
+            "po_date" => $this->poDate,
+        ]);
     }
 }

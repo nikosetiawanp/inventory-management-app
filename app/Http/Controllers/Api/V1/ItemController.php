@@ -18,7 +18,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return new ItemCollection(Item::paginate());
+        return new ItemCollection(Item::with(['product'])->paginate());
     }
 
     /**
@@ -51,7 +51,8 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
-        //
+        $item->load('product');
+        return new ItemResource($item);
     }
 
     /**

@@ -14,4 +14,8 @@ class Product extends Model
         "name",
         "unit"
     ];
+    public function item()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

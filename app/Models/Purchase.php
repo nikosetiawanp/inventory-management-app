@@ -17,6 +17,7 @@ class Purchase extends Model
         "pr_date",
         "po_number",
         "po_date",
+        "status"
     ];
 
     public function vendor(): BelongsTo

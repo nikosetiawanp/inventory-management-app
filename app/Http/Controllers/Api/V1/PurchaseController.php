@@ -19,27 +19,14 @@ class PurchaseController extends Controller
     public function index(Request $request)
     {
         // NEW
-        // $startDate = Carbon::createFromFormat('d-m-Y', $request->input("startDate"))->startOfDay();
-        // $endDate = Carbon::createFromFormat('d-m-Y', $request->input("endDate"))->startOfDay();
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
         $status = $request->input("status");
 
-        // $startDate = Carbon::createFromFormat('d-m-Y', $request->input('startDate'))->format('d-m-Y');
-        // $endDate = Carbon::createFromFormat('d-m-Y', $request->input('endDate'))->format('d-m-Y');
+        return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])->where('status', $status)->with(['vendor'])->paginate());
 
-        return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])->where('status', $status)->with(['items.product', 'vendor'])->paginate());
-        // $purchases = Purchase::whereBetween('pr_date', [$startDate, $endDate])->with(['items.product', 'vendor'])->paginate();
-        // return $purchases;
 
-        // OLD
-        // $filter = new PurchaseQuery();
-        // $queryItems = $filter->transform($request);
-        // return new PurchaseCollection(Purchase::where($queryItems)->with(['items.product', 'vendor'])->paginate());
-
-        // if (count($queryItems) == 0) {
-        //     return [];
-        // } else return new PurchaseCollection(Purchase::where($queryItems)->with(['items.product', 'vendor'])->paginate());
+        // return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])->where('status', $status)->with(['items.product', 'vendor'])->paginate());
     }
 
     /**
@@ -62,6 +49,7 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
+        $purchase->load('items.product');
         return new PurchaseResource($purchase);
     }
 

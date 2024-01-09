@@ -10,15 +10,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\BulkStoreItemRequest;
 use App\Http\Resources\V1\ItemCollection;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+
 
 class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new ItemCollection(Item::with(['product'])->paginate());
+        $purchaseId = $request->input("purchaseId");
+        return new ItemCollection(Item::where('purchase_id', $purchaseId)->with(['product'])->paginate());
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\InventoryHistoryController;
 use App\Http\Controllers\Api\V1\ItemController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\PurchaseController;
@@ -27,6 +28,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('products', ProductController::class);
     Route::apiResource('purchases', PurchaseController::class);
     Route::apiResource('items', ItemController::class);
+    Route::apiResource('inventoryhistories', InventoryHistoryController::class);
 
     Route::post('items/bulk', ['uses' => 'ItemController@bulkStore']);
 });

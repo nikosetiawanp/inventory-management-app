@@ -29,4 +29,9 @@ class Purchase extends Model
     {
         return $this->hasMany(Item::class);
     }
+
+    public function inventoryHistories(): HasMany
+    {
+        return $this->hasMany(InventoryHistory::class);
+    }
 }

@@ -8,7 +8,6 @@ use App\Http\Resources\V1\PurchaseCollection;
 use App\Http\Resources\V1\PurchaseResource;
 use App\Models\Purchase;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -23,7 +22,10 @@ class PurchaseController extends Controller
         $endDate = $request->input("endDate");
         $status = $request->input("status");
 
-        return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])->where('status', $status)->with(['vendor'])->paginate());
+        return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])
+            ->where('status', $status)
+            ->with(['vendor'])
+            ->paginate());
 
 
         // return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])->where('status', $status)->with(['items.product', 'vendor'])->paginate());

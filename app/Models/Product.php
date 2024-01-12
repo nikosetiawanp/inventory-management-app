@@ -12,10 +12,16 @@ class Product extends Model
     protected $fillable = [
         "code",
         "name",
-        "unit"
+        "unit",
+        "quantity"
     ];
-    public function item()
+    public function items()
     {
         return $this->hasMany(Item::class);
+    }
+
+    public function inventoryHistories()
+    {
+        return $this->hasMany(InventoryHistory::class);
     }
 }

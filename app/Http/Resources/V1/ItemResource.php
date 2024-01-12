@@ -22,6 +22,7 @@ class ItemResource extends JsonResource
             "tax" => $this->tax,
             "purchaseId" => $this->purchase_id,
             "productId" => $this->product_id,
+
             "product" => new ProductResource($this->whenLoaded("product")),
         ];
     }

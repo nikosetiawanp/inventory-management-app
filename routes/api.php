@@ -28,7 +28,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('products', ProductController::class);
     Route::apiResource('purchases', PurchaseController::class);
     Route::apiResource('items', ItemController::class);
-    Route::apiResource('inventoryhistories', InventoryHistoryController::class);
+    Route::apiResource('inventory-histories', InventoryHistoryController::class);
+    // Route::delete('/inventory-history/{inventoryHistory}', 'InventoryHistoryController@destroy');
+
 
     Route::post('items/bulk', ['uses' => 'ItemController@bulkStore']);
 });

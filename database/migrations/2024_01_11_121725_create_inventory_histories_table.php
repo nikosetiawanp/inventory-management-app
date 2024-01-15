@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('inventory_histories', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
-            $table->string('type'); // ARRIVAL || DEPARTURE
+            $table->string('type');
             $table->string('description')->nullable();
             $table->integer('quantity');
             $table->integer('stock_after');

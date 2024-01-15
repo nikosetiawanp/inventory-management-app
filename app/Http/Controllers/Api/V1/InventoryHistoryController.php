@@ -23,7 +23,7 @@ class InventoryHistoryController extends Controller
 
         return new InventoryHistoryCollection(InventoryHistory::whereBetween('date', [$startDate, $endDate])
             ->where('type', $type)
-            ->with(['purchase', 'product'])
+            ->with(['purchase.vendor', 'product'])
             ->paginate());
     }
 
@@ -48,7 +48,7 @@ class InventoryHistoryController extends Controller
      */
     public function show(InventoryHistory $inventoryHistory)
     {
-        //
+        return new InventoryHistoryResource($inventoryHistory);
     }
 
     /**

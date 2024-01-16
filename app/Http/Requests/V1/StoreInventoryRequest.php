@@ -5,7 +5,7 @@ namespace App\Http\Requests\V1;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreInventoryHistoryRequest extends FormRequest
+class StoreInventoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +24,17 @@ class StoreInventoryHistoryRequest extends FormRequest
     {
         return [
             "date" => ["required", "date_format:Y-m-d"],
+            "letterNumber" => ["required"],
             "type" => ["required", Rule::in(['A', 'D'])],
             "description" => ["nullable"],
-            "quantity" => ["required"],
-            "stockAfter" => ["required"],
-
-            "productId" => ["required"],
-            "purchaseId" => ["nullable"],
+            "purchaseId" => ["required"],
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            "stock_after" => $this->stockAfter,
-            "product_id" => $this->productId,
+            "letter_number" => $this->letterNumber,
             "purchase_id" => $this->purchaseId,
         ]);
     }

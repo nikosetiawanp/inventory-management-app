@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePurchaseItemRequest extends FormRequest
+class StoreInventoryItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,8 @@ class StorePurchaseItemRequest extends FormRequest
     {
         return [
             "quantity" => ["required"],
-            "price" => ["required"],
-            "discount" => ["required"],
-            "tax" => ["required"],
-            "purchaseId" => ["required"],
+            "stockAfter" => ["required"],
+            "inventoryId" => ["required"],
             "productId" => ["required"],
         ];
     }
@@ -34,7 +32,8 @@ class StorePurchaseItemRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "purchase_id" => $this->purchaseId,
+            "stock_after" => $this->stockAfter,
+            "inventory_id" => $this->inventoryId,
             "product_id" => $this->productId,
         ]);
     }

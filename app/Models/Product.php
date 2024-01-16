@@ -15,13 +15,13 @@ class Product extends Model
         "unit",
         "quantity"
     ];
-    public function items()
+    public function purchaseItems()
     {
-        return $this->hasMany(Item::class);
+        return $this->hasMany(PurchaseItem::class);
     }
 
-    public function inventoryHistories()
+    public function inventoryHistoryItems()
     {
-        return $this->hasMany(InventoryHistory::class);
+        return $this->hasMany(InventoryHistoryItem::class);
     }
 }

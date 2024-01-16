@@ -6,31 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Item extends Model
+class InventoryItem extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         "quantity",
-        "price",
-        "discount",
-        "tax",
-        "purchase_id",
+        "stock_after",
         "product_id",
+        "inventory_id"
     ];
-
-    public function purchase(): BelongsTo
-    {
-        return $this->belongsTo(Purchase::class);
-    }
 
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function vendor(): BelongsTo
+    public function inventory(): BelongsTo
     {
-        return $this->belongsTo(Vendor::class);
+        return $this->belongsTo(Inventory::class);
     }
 }

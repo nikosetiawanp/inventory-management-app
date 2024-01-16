@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\V1\InventoryHistoryController;
-use App\Http\Controllers\Api\V1\ItemController;
+use App\Http\Controllers\Api\V1\InventoryController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\PurchaseController;
 use App\Http\Controllers\Api\V1\VendorController;
 use App\Http\Controllers\Api\V1\PurchaseItemController;
+use App\Http\Controllers\Api\V1\InventoryItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,11 +28,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('vendors', VendorController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('purchases', PurchaseController::class);
-    // Route::apiResource('items', ItemController::class);
     Route::apiResource('purchase-items', PurchaseItemController::class);
+    Route::apiResource('inventories', InventoryController::class);
+    Route::apiResource('inventory-items', InventoryItemController::class);
 
-    Route::apiResource('inventory-histories', InventoryHistoryController::class);
-
-    // Route::post('items/bulk', ['uses' => 'ItemController@bulkStore']);
     Route::post('purchase-items/bulk', ['uses' => 'PurchaseItemController@bulkStore']);
 });

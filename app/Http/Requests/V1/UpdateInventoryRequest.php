@@ -5,7 +5,7 @@ namespace App\Http\Requests\V1;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateInventoryHistoryRequest extends FormRequest
+class UpdateInventoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,23 +26,19 @@ class UpdateInventoryHistoryRequest extends FormRequest
         if ($method === "PUT") {
             return [
                 "date" => ["required", "date_format:Y-m-d"],
+                "letterNumber" => ["required"],
                 "type" => ["required", Rule::in(['A', 'D'])],
                 "description" => ["nullable"],
-                "quantity" => ["required"],
-                "stockAfter" => ["required"],
 
-                "productId" => ["required"],
                 "purchaseId" => ["nullable"],
             ];
         } else {
             return [
                 "date" => ["sometimes", "required", "date_format:Y-m-d"],
+                "letterNumber" => ["sometimes", "required"],
                 "type" => ["required", Rule::in(['A', 'D'])],
                 "description" => ["sometimes", "nullable"],
-                "quantity" => ["sometimes", "required"],
-                "stockAfter" => ["sometimes", "required"],
 
-                "productId" => ["required"],
                 "purchaseId" => ["nullable"],
             ];
         }

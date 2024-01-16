@@ -4,14 +4,14 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreItemRequest extends FormRequest
+class UpdateInventoryItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,12 +22,7 @@ class StoreItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "quantity" => ["required"],
-            "price" => ["required"],
-            "discount" => ["required"],
-            "tax" => ["required"],
-            "purchase_id" => ["required"],
-            "product_id" => ["required"],
+            //
         ];
     }
 }

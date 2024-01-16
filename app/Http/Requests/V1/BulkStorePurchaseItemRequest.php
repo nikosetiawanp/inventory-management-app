@@ -26,8 +26,8 @@ class BulkStorePurchaseItemRequest extends FormRequest
             "*.price" => ["required", "numeric"],
             "*.discount" => ["required", "numeric"],
             "*.tax" => ["required", "numeric"],
-            "*.purchase_id" => ["required"],
-            "*.product_id" => ["required"],
+            "*.purchaseId" => ["required"],
+            "*.productId" => ["required"],
         ];
     }
 

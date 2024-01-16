@@ -25,9 +25,9 @@ class Purchase extends Model
         return $this->belongsTo(Vendor::class);
     }
 
-    public function items(): HasMany
+    public function purchaseItems(): HasMany
     {
-        return $this->hasMany(Item::class);
+        return $this->hasMany(PurchaseItem::class);
     }
 
     public function inventoryHistories(): HasMany

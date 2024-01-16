@@ -23,7 +23,7 @@ class PurchaseResource extends JsonResource
             "poDate" => $this->po_date,
             "status" => $this->status,
             "vendor" => new VendorResource($this->whenLoaded("vendor")),
-            "items" => ItemResource::collection($this->whenLoaded("items")),
+            "purchaseItems" => ItemResource::collection($this->whenLoaded("purchaseItems")),
         ];
     }
 }

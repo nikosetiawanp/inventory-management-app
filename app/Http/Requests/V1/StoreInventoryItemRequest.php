@@ -23,7 +23,7 @@ class StoreInventoryItemRequest extends FormRequest
     {
         return [
             "quantity" => ["required"],
-            "stockAfter" => ["required"],
+            "stockAfter" => ["sometimes"],
             "inventoryId" => ["required"],
             "productId" => ["required"],
         ];

@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BulkStoreItemRequest extends FormRequest
+class BulkStoreInventoryItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,9 @@ class BulkStoreItemRequest extends FormRequest
     {
         return [
             "*.quantity" => ["required", "integer"],
-            "*.price" => ["required", "numeric"],
-            "*.discount" => ["required", "numeric"],
-            "*.tax" => ["required", "numeric"],
-            "*.purchase_id" => ["required"],
-            "*.product_id" => ["required"],
+            "*.stockAfter" => ["required", "numeric"],
+            "*.inventoryId" => ["required"],
+            "*.productId" => ["required"],
         ];
     }
 
@@ -35,7 +33,8 @@ class BulkStoreItemRequest extends FormRequest
     {
         $data = [];
         foreach ($this->toArray() as $obj) {
-            $obj["purchase_id"] = $obj["purchaseId"] ?? null;
+            $obj["stock_after"] = $obj["stockAfter"] ?? null;
+            $obj["inventory_id"] = $obj["inventoryId"] ?? null;
             $obj["product_id"] = $obj["productId"] ?? null;
 
             $data[] = $obj;

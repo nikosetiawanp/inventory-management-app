@@ -24,8 +24,8 @@ class Inventory extends Model
         return $this->belongsTo(Purchase::class);
     }
 
-    public function inventoryHistoryItems(): HasMany
+    public function inventoryItems(): HasMany
     {
-        return $this->hasMany(InventoryHistoryItem::class);
+        return $this->hasMany(InventoryItem::class);
     }
 }

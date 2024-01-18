@@ -20,12 +20,20 @@ class InventoryController extends Controller
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
         $type = $request->input("type");
+        $purchaseId = $request->input("purchaseId");
 
-        return new InventoryCollection(Inventory::whereBetween('date', [$startDate, $endDate])
-            ->where('type', $type)
-            ->with(['purchase.vendor'])
-            ->get());
+        if ($request->has('purchaseId')) {
+            return new InventoryCollection(Inventory::where('purchase_id', $purchaseId)
+                ->with(['inventoryItems'])
+                ->get());
+        } else {
+            return new InventoryCollection(Inventory::whereBetween('date', [$startDate, $endDate])
+                ->where('type', $type)
+                ->with(['purchase.vendor', 'inventoryItems'])
+                ->get());
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.

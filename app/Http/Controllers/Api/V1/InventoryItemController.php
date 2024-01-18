@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\BulkStoreInventoryItemRequest;
 use App\Http\Requests\V1\StoreInventoryItemRequest;
 use App\Http\Requests\V1\UpdateInventoryItemRequest;
 use App\Http\Resources\V1\InventoryItemCollection;
 use App\Http\Resources\V1\InventoryItemResource;
 use App\Models\InventoryItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class InventoryItemController extends Controller
 {
@@ -17,12 +20,10 @@ class InventoryItemController extends Controller
      */
     public function index(Request $request)
     {
-        // return new InventoryHistoryItemCollection(InventoryHistoryItem::paginate());
         $inventoryId = $request->input("inventoryId");
-        return new InventoryItemCollection(InventoryItem::where('inventory_id', $inventoryId)->with(['product'])->get());
-        // return new PurchaseItemCollection(PurchaseItem::where('purchase_id', $purchaseId)->with(['product'])->paginate());
-
-        // return new InventoryItemResource(InventoryItem::with());
+        return new InventoryItemCollection(InventoryItem::where('inventory_id', $inventoryId)
+            ->with(['product'])
+            ->get());
     }
 
     /**
@@ -33,12 +34,81 @@ class InventoryItemController extends Controller
         //
     }
 
+    public function bulkStore(BulkStoreInventoryItemRequest $request)
+    {
+        // Extract common fields from each item in the bulk request
+        $commonFields = collect($request->all())->map(function ($arr) {
+            return Arr::except($arr, ['stockAfter', 'inventoryId', 'productId']);
+        })->toArray();
+
+        // Get product IDs from the bulk request
+        $productIds = array_column($request->all(), 'productId');
+
+        // Retrieve products in bulk from the database
+        $products = Product::whereIn('id', $productIds)->get();
+
+        // Create a new InventoryItem for each item in the bulk request
+        $inventoryItems = collect($request->all())->map(function ($item) use ($commonFields, $products) {
+            // Get the associated product
+            $product = $products->where('id', $item['productId'])->first();
+
+            // Increment the quantity of the product
+            $product->quantity += $item['quantity'];
+            $product->save();
+
+            // Retrieve the updated quantity
+            $updatedQuantity = $product->fresh()->quantity;
+
+            // Merge common fields with item-specific fields
+            $itemFields = array_merge($commonFields, [
+                'quantity' => $item['quantity'],
+                'inventory_id' => $item['inventoryId'],
+                'product_id' => $item['productId'],
+                'stock_after' => $updatedQuantity,
+            ]);
+
+            // Create and return the new InventoryItem
+            return InventoryItem::create($itemFields);
+        });
+
+        // Respond with the new InventoryItems
+        return new InventoryItemCollection($inventoryItems);
+        //OLD
+        // $bulk = collect($request->all())->map(function ($arr, $key) {
+        //     return Arr::except($arr, ["stockAfter", "inventoryId", "productId"]);
+        // });
+        // InventoryItem::insert($bulk->toArray());
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreInventoryItemRequest $request)
     {
-        return new InventoryItemResource(InventoryItem::create($request->all()));
+
+        // Get the associated product
+        $product = Product::find($request->input('productId'));
+
+        // Increment the quantity of the product
+        $product->quantity += $request->input('quantity');
+        $product->save();
+
+        // Retrieve the updated quantity
+        $updatedQuantity = $product->fresh()->quantity;
+
+        // Create a new InventoryItem with the correct stockAfter value
+        $inventoryItem = InventoryItem::create([
+            'quantity' => $request->input('quantity'),
+            'inventory_id' => $request->input('inventoryId'),
+            'product_id' => $request->input('productId'),
+            'stock_after' => $updatedQuantity,
+        ]);
+
+        // Respond with the new InventoryItem
+        return new InventoryItemResource($inventoryItem);
+
+        //OLD
+        // return new InventoryItemResource(InventoryItem::create($request->all()));
     }
 
     /**

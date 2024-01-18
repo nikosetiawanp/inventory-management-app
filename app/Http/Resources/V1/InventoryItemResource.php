@@ -15,7 +15,7 @@ class InventoryItemResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->when(isset($this->id), $this->id),
+            "id" => $this->id,
             "quantity" => $this->quantity,
             "stockAfter" => $this->stock_after,
             "productId" => $this->product_id,

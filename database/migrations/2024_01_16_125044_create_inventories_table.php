@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('letter_number');
             $table->string('type');
             $table->string('description')->nullable();
-            $table->string('purchase_id');
+            $table->integer('purchase_id');
             $table->timestamps();
 
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');

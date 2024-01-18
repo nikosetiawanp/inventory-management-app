@@ -33,4 +33,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('inventory-items', InventoryItemController::class);
 
     Route::post('purchase-items/bulk', ['uses' => 'PurchaseItemController@bulkStore']);
+    Route::post('inventory-items/bulk', ['uses' => 'InventoryItemController@bulkStore']);
 });

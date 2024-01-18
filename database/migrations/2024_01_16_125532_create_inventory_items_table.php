@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('inventory_items', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->string('stock_after');
+            $table->string('stock_after')->nullable();
             $table->integer('product_id');
             $table->integer('inventory_id');
             $table->timestamps();

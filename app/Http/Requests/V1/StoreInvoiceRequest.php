@@ -3,9 +3,8 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreInventoryRequest extends FormRequest
+class StoreInvoiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,22 +22,31 @@ class StoreInventoryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "invoiceNumber" => ["required"],
             "date" => ["required", "date_format:Y-m-d"],
-            "letterNumber" => ["required"],
-            "type" => ["required", Rule::in(['A', 'D'])],
-            "description" => ["nullable"],
+            "dueDate" => ["required", "date_format:Y-m-d"],
+            "totalDebt" => ["required"],
             "purchaseId" => ["required"],
-            "invoiceNumber" => ["sometimes"],
-            // "dueDate" => ["date_format:Y-m-d"]
+            "inventoryId" => ["required"]
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            "letter_number" => $this->letterNumber,
-            "purchase_id" => $this->purchaseId,
             "invoice_number" => $this->invoiceNumber,
+            "due_date" => $this->dueDate,
+            "total_debt" => $this->totalDebt,
+            "purchase_id" => $this->purchaseId,
+            "inventory_id" => $this->inventoryId
         ]);
     }
 }
+
+
+// $table->string('invoice_number');
+// $table->dateTime('date');
+// $table->dateTime('due_date');
+// $table->decimal('total_debt');
+// $table->string('purchase_id');
+// $table->string('inventory_id');

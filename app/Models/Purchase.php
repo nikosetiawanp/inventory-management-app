@@ -30,8 +30,13 @@ class Purchase extends Model
         return $this->hasMany(PurchaseItem::class);
     }
 
-    public function inventoryHistories(): HasMany
+    public function inventories(): HasMany
     {
-        return $this->hasMany(InventoryHistory::class);
+        return $this->hasMany(Inventory::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
     }
 }

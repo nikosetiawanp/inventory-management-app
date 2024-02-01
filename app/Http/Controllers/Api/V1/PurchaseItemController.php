@@ -34,8 +34,22 @@ class PurchaseItemController extends Controller
 
     public function bulkStore(BulkStorePurchaseItemRequest $request)
     {
+        // $bulk = collect($request->all())->map(function ($arr, $key) {
+        //     return Arr::except($arr, ["purchaseId", "productId"]);
+        // });
+
+        // PurchaseItem::insert($bulk->toArray());
         $bulk = collect($request->all())->map(function ($arr, $key) {
-            return Arr::except($arr, ["purchaseId", "productId"]);
+            // Map the columns you want to insert, excluding 'prPrice'
+            return Arr::only($arr, [
+                "quantity",
+                "pr_price",
+                "po_price",
+                "discount",
+                "tax",
+                "purchase_id",
+                "product_id"
+            ]);
         });
 
         PurchaseItem::insert($bulk->toArray());
@@ -71,8 +85,17 @@ class PurchaseItemController extends Controller
      */
     public function update(UpdatePurchaseItemRequest $request, PurchaseItem $purchaseItem)
     {
-        //
+        $purchaseItem->update($request->all());
+        return new PurchaseItemResource($purchaseItem);
     }
+
+
+    // public function update(UpdateInventoryRequest $request, Inventory $inventory)
+    // {
+
+    //     $inventory->update($request->all());
+    //     return new InventoryResource($inventory);
+    // }
 
     /**
      * Remove the specified resource from storage.

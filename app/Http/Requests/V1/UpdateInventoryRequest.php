@@ -29,18 +29,29 @@ class UpdateInventoryRequest extends FormRequest
                 "letterNumber" => ["required"],
                 "type" => ["required", Rule::in(['A', 'D'])],
                 "description" => ["nullable"],
-
-                "purchaseId" => ["nullable"],
+                "purchaseId" => ["required"],
+                "invoiceNumber" => ["required"],
+                "dueDate" => ["required", "date_format:Y-m-d"]
             ];
         } else {
             return [
                 "date" => ["sometimes", "required", "date_format:Y-m-d"],
                 "letterNumber" => ["sometimes", "required"],
-                "type" => ["required", Rule::in(['A', 'D'])],
-                "description" => ["sometimes", "nullable"],
-
-                "purchaseId" => ["nullable"],
+                "type" => ["sometimes", "required", Rule::in(['A', 'D'])],
+                "description" => ["nullable"],
+                "purchaseId" => ["sometimes", "required"],
+                "invoiceNumber" => ["sometimes"],
+                "dueDate" => ["sometimes", "date_format:Y-m-d"]
             ];
         }
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            "letter_number" => $this->letterNumber,
+            "purchase_id" => $this->purchaseId,
+            "invoice_number" => $this->invoiceNumber,
+        ]);
     }
 }

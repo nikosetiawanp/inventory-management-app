@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('purchase_items', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->decimal('price');
+            $table->decimal('pr_price');
+            $table->decimal('po_price')->nullable();
             $table->decimal('discount');
             $table->decimal('tax');
             $table->integer('purchase_id');

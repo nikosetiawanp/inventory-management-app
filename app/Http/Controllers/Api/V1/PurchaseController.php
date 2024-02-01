@@ -26,8 +26,6 @@ class PurchaseController extends Controller
             ->where('status', $status)
             ->with(['vendor'])
             ->paginate());
-
-
         // return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])->where('status', $status)->with(['items.product', 'vendor'])->paginate());
     }
 

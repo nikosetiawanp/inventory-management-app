@@ -11,7 +11,7 @@ class UpdatePurchaseItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,37 @@ class UpdatePurchaseItemRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+        if ($method === "PUT") {
+            return [
+                "quantity" => ["required"],
+                "prPrice" => ["required"],
+                "poPrice" => ["sometimes"],
+                "discount" => ["required"],
+                "tax" => ["required"],
+                "purchaseId" => ["required"],
+                "productId" => ["required"],
+            ];
+        } else {
+            return [
+                "quantity" => ["sometimes", "required"],
+                "prPrice" => ["sometimes", "required"],
+                "poPrice" => ["sometimes"],
+                "discount" => ["sometimes", "required"],
+                "tax" => ["sometimes", "required"],
+                "purchaseId" => ["sometimes", "required"],
+                "productId" => ["sometimes", "required"],
+            ];
+        }
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            "po_price" => $this->poPrice,
+            "pr_price" => $this->prPrice,
+            "purchase_id" => $this->purchaseId,
+            "product_id" => $this->productId,
+        ]);
     }
 }

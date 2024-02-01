@@ -5,7 +5,7 @@ namespace App\Http\Resources\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class InventoryResource extends JsonResource
+class InvoiceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,14 +17,13 @@ class InventoryResource extends JsonResource
         return [
             "id" => $this->id,
             "date" => $this->date,
-            "letterNumber" => $this->letter_number,
-            "type" => $this->type,
-            "description" => $this->description,
-            "purchaseId" => $this->purchase_id,
             "invoiceNumber" => $this->invoice_number,
-
+            "dueDate" => $this->due_date,
+            "totalDebt" => $this->total_debt,
+            "purchaseId" => $this->purchase_id,
+            "inventoryId" => $this->inventory_id,
             "purchase" => new PurchaseResource($this->whenLoaded("purchase")),
-            "inventoryItems" => InventoryItemResource::collection($this->whenLoaded("inventoryItems")),
+            "inventory" => new PurchaseResource($this->whenLoaded("inventory")),
         ];
     }
 }

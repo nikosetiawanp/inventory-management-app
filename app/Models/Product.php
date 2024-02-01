@@ -20,8 +20,8 @@ class Product extends Model
         return $this->hasMany(PurchaseItem::class);
     }
 
-    public function inventoryHistoryItems()
+    public function inventoryItems()
     {
-        return $this->hasMany(InventoryHistoryItem::class);
+        return $this->hasMany(InventoryItem::class);
     }
 }

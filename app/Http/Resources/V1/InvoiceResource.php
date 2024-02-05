@@ -23,7 +23,7 @@ class InvoiceResource extends JsonResource
             "purchaseId" => $this->purchase_id,
             "inventoryId" => $this->inventory_id,
             "purchase" => new PurchaseResource($this->whenLoaded("purchase")),
-            "inventory" => new PurchaseResource($this->whenLoaded("inventory")),
+            "inventory" => new InventoryResource($this->whenLoaded("inventory")),
         ];
     }
 }

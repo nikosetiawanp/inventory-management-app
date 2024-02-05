@@ -25,12 +25,12 @@ class InventoryController extends Controller
         if ($request->has('purchaseId')) {
             return new InventoryCollection(Inventory::where('purchase_id', $purchaseId)
                 ->with(['inventoryItems'])
-                ->get());
+                ->paginate());
         } else {
             return new InventoryCollection(Inventory::whereBetween('date', [$startDate, $endDate])
                 ->where('type', $type)
                 ->with(['purchase.vendor', 'inventoryItems'])
-                ->get());
+                ->paginate());
         }
     }
 

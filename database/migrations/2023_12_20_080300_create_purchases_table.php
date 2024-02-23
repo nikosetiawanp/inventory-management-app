@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('vendor_id');
-            $table->string('pr_number');
-            $table->dateTime('pr_date');
-            $table->string('po_number')->nullable();
-            $table->dateTime('po_date')->nullable();
-            $table->string('status');
+            $table->string('number');
+            $table->dateTime('date');
+            $table->dateTime('expected_arrival')->nullable();
+            $table->boolean('is_approved');
+            $table->unsignedBigInteger('contact_id');
             $table->timestamps();
 
-            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
+            $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('cascade');
         });
     }
 

@@ -16,12 +16,12 @@ class InventoryResource extends JsonResource
     {
         return [
             "id" => $this->id,
+            "number" => $this->number,
             "date" => $this->date,
-            "letterNumber" => $this->letter_number,
-            "type" => $this->type,
+            "isArrival" => $this->is_arrival,
+            "receiptNumber" => $this->receipt_number,
             "description" => $this->description,
             "purchaseId" => $this->purchase_id,
-            "invoiceNumber" => $this->invoice_number,
 
             "purchase" => new PurchaseResource($this->whenLoaded("purchase")),
             "inventoryItems" => InventoryItemResource::collection($this->whenLoaded("inventoryItems")),

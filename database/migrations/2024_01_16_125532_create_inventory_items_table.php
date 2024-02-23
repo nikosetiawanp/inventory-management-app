@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('inventory_items', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->string('stock_after')->nullable();
-            $table->integer('product_id');
-            $table->integer('inventory_id');
+            $table->string('inventory_id');
+            $table->string('product_id');
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

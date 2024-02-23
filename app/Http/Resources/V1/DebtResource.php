@@ -16,14 +16,13 @@ class DebtResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "debtAmount" => $this->debt_amount,
-            "status" => $this->status,
-            "paidDate" => $this->paid_date,
-            "receiptNumber" => $this->receipt_number,
-            "paidAmount" => $this->paid_amount,
-            "balance" => $this->balance,
+            "amount" => $this->amount,
+            "isPaid" => $this->is_paid,
             "invoiceId" => $this->invoice_id,
-            "invoice" => new InvoiceResource($this->whenLoaded("invoice"))
+            "contactId" => $this->contact_id,
+
+            "invoice" => new InvoiceResource($this->whenLoaded("invoice")),
+            "debtPayments" => DebtPaymentResource::collection($this->whenLoaded("debtPayments")),
         ];
     }
 }

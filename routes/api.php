@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\DebtController;
+use App\Http\Controllers\Api\V1\DebtPaymentController;
 use App\Http\Controllers\Api\V1\InventoryController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\PurchaseController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Api\V1\VendorController;
 use App\Http\Controllers\Api\V1\PurchaseItemController;
 use App\Http\Controllers\Api\V1\InventoryItemController;
 use App\Http\Controllers\Api\V1\InvoiceController;
+use App\Http\Controllers\Api\V1\ContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+    Route::apiResource('contacts', ContactController::class);
     Route::apiResource('vendors', VendorController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('purchases', PurchaseController::class);
@@ -35,6 +38,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('inventory-items', InventoryItemController::class);
     Route::apiResource('invoices', InvoiceController::class);
     Route::apiResource('debts', DebtController::class);
+    Route::apiResource('debt-payments', DebtPaymentController::class);
 
     Route::post('purchase-items/bulk', ['uses' => 'PurchaseItemController@bulkStore']);
     Route::post('inventory-items/bulk', ['uses' => 'InventoryItemController@bulkStore']);

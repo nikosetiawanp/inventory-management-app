@@ -26,32 +26,28 @@ class UpdatePurchaseRequest extends FormRequest
         $method = $this->method();
         if ($method === "PUT") {
             return [
-                "vendorId" => ["required"],
-                "status" => ["required",  Rule::in(['PR', 'PO'])],
-                "prNumber" => ["required"],
-                "prDate" => ["required", "date_format:Y-m-d"],
-                "poNumber" => ["nullable"],
-                "poDate" => ["nullable", "date_format:Y-m-d"],
+                "number" => ["required"],
+                "date" => ["required", "date_format:Y-m-d"],
+                "expectedArrival" => ["nullable", "date_format:format:Y-m-d"],
+                "isApproved" => ["required"],
+                "contactId" => ["required"],
             ];
         } else {
             return [
-                "vendorId" => ["sometimes", "required"],
-                "status" => ["required",  Rule::in(['PR', 'PO'])],
-                "prNumber" => ["sometimes", "required"],
-                "prDate" => ["sometimes", "required", "date_format:Y-m-d"],
-                "poNumber" => ["sometimes", "nullable"],
-                "poDate" => ["sometimes", "nullable", "date_format:Y-m-d"],
+                "number" => ["sometimes"],
+                "date" => ["sometimes", "date_format:Y-m-d"],
+                "expectedArrival" => ["nullable", "date_format:format:Y-m-d"],
+                "isApproved" => ["sometimes"],
+                "contactId" => ["sometimes"],
             ];
         }
     }
     protected function prepareForValidation()
     {
         $this->merge([
-            "vendor_id" => $this->vendorId,
-            "pr_number" => $this->prNumber,
-            "pr_date" => $this->prDate,
-            "po_number" => $this->poNumber,
-            "po_date" => $this->poDate,
+            "expected_arrival" => $this->expectedArrival,
+            "is_approved" => $this->isApproved,
+            "contact_id" => $this->contactId
         ]);
     }
 }

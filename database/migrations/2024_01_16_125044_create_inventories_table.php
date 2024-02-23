@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
+            $table->string('number');
             $table->dateTime('date');
-            $table->string('letter_number');
-            $table->string('type');
+            $table->boolean('is_arrival');
+            $table->string('receipt_number');
             $table->string('description')->nullable();
             $table->integer('purchase_id');
-            $table->string('invoice_number')->nullable();
             $table->timestamps();
 
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');

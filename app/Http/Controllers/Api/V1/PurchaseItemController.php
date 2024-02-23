@@ -21,7 +21,7 @@ class PurchaseItemController extends Controller
     public function index(Request $request)
     {
         $purchaseId = $request->input("purchaseId");
-        return new PurchaseItemCollection(PurchaseItem::where('purchase_id', $purchaseId)->with(['product'])->paginate());
+        return new PurchaseItemCollection(PurchaseItem::where('purchase_id', $purchaseId)->with(['product'])->get());
     }
 
     /**
@@ -34,17 +34,11 @@ class PurchaseItemController extends Controller
 
     public function bulkStore(BulkStorePurchaseItemRequest $request)
     {
-        // $bulk = collect($request->all())->map(function ($arr, $key) {
-        //     return Arr::except($arr, ["purchaseId", "productId"]);
-        // });
 
-        // PurchaseItem::insert($bulk->toArray());
         $bulk = collect($request->all())->map(function ($arr, $key) {
-            // Map the columns you want to insert, excluding 'prPrice'
             return Arr::only($arr, [
                 "quantity",
-                "pr_price",
-                "po_price",
+                "price",
                 "discount",
                 "tax",
                 "purchase_id",

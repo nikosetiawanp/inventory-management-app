@@ -33,7 +33,6 @@ class BulkStoreInventoryItemRequest extends FormRequest
     {
         $data = [];
         foreach ($this->toArray() as $obj) {
-            $obj["stock_after"] = $obj["stockAfter"] ?? null;
             $obj["inventory_id"] = $obj["inventoryId"] ?? null;
             $obj["product_id"] = $obj["productId"] ?? null;
 

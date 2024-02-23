@@ -16,13 +16,12 @@ class PurchaseResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "vendorId" => $this->vendor_id,
-            "prNumber" => $this->pr_number,
-            "prDate" => $this->pr_date,
-            "poNumber" => $this->po_number,
-            "poDate" => $this->po_date,
-            "status" => $this->status,
-            "vendor" => new VendorResource($this->whenLoaded("vendor")),
+            "number" => $this->number,
+            "date" => $this->date,
+            "expectedArrival" => $this->expected_arrival,
+            "isApproved" => $this->is_approved,
+            "contactId" => $this->contact_id,
+            "contact" => new ContactResource($this->whenLoaded("contact")),
             "purchaseItems" => PurchaseItemResource::collection($this->whenLoaded("purchaseItems")),
         ];
     }

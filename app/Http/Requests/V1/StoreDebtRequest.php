@@ -22,12 +22,8 @@ class StoreDebtRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "debtAmount" => ["required"],
-            "status" => ["required"],
-            "balance" => ["required"],
-            "paidDate" => ["nullable", "date_format:Y-m-d"],
-            "receiptNumber" => ["nullable"],
-            "paidAmount" => ["nullable"],
+            "amount" => ["required"],
+            "isPaid" => ["required"],
             "invoiceId" => ["required"],
         ];
     }
@@ -35,10 +31,7 @@ class StoreDebtRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "debt_amount" => $this->debtAmount,
-            "paid_date" => $this->paidDate,
-            "receipt_number" => $this->receiptNumber,
-            "paid_amount" => $this->paidAmount,
+            "is_paid" => $this->isPaid,
             "invoice_id" => $this->invoiceId
         ]);
     }

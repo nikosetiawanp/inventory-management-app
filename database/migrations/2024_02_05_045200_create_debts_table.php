@@ -13,21 +13,14 @@ return new class extends Migration
     {
         Schema::create('debts', function (Blueprint $table) {
             $table->id();
-            // $table->dateTime('invoice_date');
-            // $table->string('invoice_number');
-            // $table->string('vendor_name');
-            // $table->string('due_date');
-
-            $table->string('debt_amount');
-            $table->string('status'); // PAID /UNPAID
-            $table->dateTime('paid_date')->nullable();
-            $table->string('receipt_number')->nullable();
-            $table->string('paid_amount')->nullable();
+            $table->decimal('amount');
+            $table->boolean('is_paid');
             $table->string('invoice_id');
-            $table->decimal('balance');
+            $table->string('contact_id');
             $table->timestamps();
 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->foreign('contact_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }
 

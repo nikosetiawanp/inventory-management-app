@@ -12,12 +12,12 @@ class Inventory extends Model
     use HasFactory;
 
     protected $fillable = [
+        "number",
         "date",
-        "letter_number",
-        "type",
+        "is_arrival",
+        "receipt_number",
         "description",
         "purchase_id",
-        "invoice_number",
     ];
 
     public function purchase(): BelongsTo

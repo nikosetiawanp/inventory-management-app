@@ -12,9 +12,8 @@ class InventoryItem extends Model
 
     protected $fillable = [
         "quantity",
-        "stock_after",
-        "product_id",
-        "inventory_id"
+        "inventory_id",
+        "product_id"
     ];
 
     public function product(): BelongsTo

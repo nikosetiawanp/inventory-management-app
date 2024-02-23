@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('purchase_items', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->decimal('pr_price');
-            $table->decimal('po_price')->nullable();
+            $table->decimal('price');
             $table->decimal('discount');
             $table->decimal('tax');
-            $table->integer('purchase_id');
-            $table->integer('product_id');
+            $table->string('purchase_id');
+            $table->string('product_id');
             $table->timestamps();
 
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');

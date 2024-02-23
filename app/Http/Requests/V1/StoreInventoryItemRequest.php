@@ -23,7 +23,6 @@ class StoreInventoryItemRequest extends FormRequest
     {
         return [
             "quantity" => ["required"],
-            "stockAfter" => ["sometimes"],
             "inventoryId" => ["required"],
             "productId" => ["required"],
         ];
@@ -32,7 +31,6 @@ class StoreInventoryItemRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "stock_after" => $this->stockAfter,
             "inventory_id" => $this->inventoryId,
             "product_id" => $this->productId,
         ]);

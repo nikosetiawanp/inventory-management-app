@@ -19,13 +19,14 @@ class DebtController extends Controller
     {
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
-        $status = $request->input("status");
 
-        return new DebtCollection(Debt::where('status', $status)
-            ->with(['invoice'])
-            ->paginate());
+        $debts = Debt::whereHas('invoice', function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('date', [$startDate, $endDate]);
+        })
+            ->with(['invoice.purchase.vendor', 'payments'])
+            ->paginate();
 
-        // return "Index";
+        return new DebtCollection($debts);
     }
 
     /**
@@ -41,7 +42,6 @@ class DebtController extends Controller
      */
     public function store(StoreDebtRequest $request)
     {
-        // return "Store Debt";
         return new DebtResource(Debt::create($request->all()));
     }
 
@@ -66,7 +66,8 @@ class DebtController extends Controller
      */
     public function update(UpdateDebtRequest $request, Debt $debt)
     {
-        //
+        $debt->update($request->all());
+        return new  DebtResource($debt);
     }
 
     /**
@@ -74,6 +75,8 @@ class DebtController extends Controller
      */
     public function destroy(Debt $debt)
     {
-        //
+        if ($debt) {
+            $debt->delete();
+        }
     }
 }

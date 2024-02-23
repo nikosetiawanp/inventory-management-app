@@ -21,8 +21,26 @@ class UpdateInventoryItemRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+        if ($method == 'PUT') {
+            return [
+                "quantity" => ["required"],
+                "inventoryId" => ["required"],
+                "productId" => ["required"],
+            ];
+        } else {
+            return [
+                "quantity" => ["sometimes"],
+                "inventoryId" => ["sometimes"],
+                "productId" => ["sometimes"],
+            ];
+        }
+    }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            "inventory_id" => $this->inventoryId,
+            "product_id" => $this->productId,
+        ]);
     }
 }

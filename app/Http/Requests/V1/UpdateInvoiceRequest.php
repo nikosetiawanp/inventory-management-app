@@ -21,6 +21,32 @@ class UpdateInvoiceRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        $method = $this->method();
+        if ($method === "PUT") {
+            return [
+                "number" => ["required"],
+                "date" => ["required", "date_format:Y-m-d"],
+                "dueDate" => ["required", "date_format:Y-m-d"],
+                "purchaseId" => ["required"],
+                "inventoryId" => ["required"]
+            ];
+        } else {
+            return [
+                "number" => ["sometimes"],
+                "date" => ["sometimes", "date_format:Y-m-d"],
+                "dueDate" => ["sometimes", "date_format:Y-m-d"],
+                "purchaseId" => ["sometimes"],
+                "inventoryId" => ["sometimes"]
+            ];
+        }
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            "due_date" => $this->dueDate,
+            "purchase_id" => $this->purchaseId,
+            "inventory_id" => $this->inventoryId
+        ]);
     }
 }

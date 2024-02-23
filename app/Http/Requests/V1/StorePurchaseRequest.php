@@ -23,23 +23,20 @@ class StorePurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "vendorId" => ["required"],
-            "prNumber" => ["required"],
-            "status" => ["required",  Rule::in(['PR', 'PO'])],
-            "prDate" => ["required", "date_format:Y-m-d"],
-            "poNumber" => ["nullable"],
-            "poDate" => ["nullable", "date_format:Y-m-d"],
+            "number" => ["required"],
+            "date" => ["required", "date_format:Y-m-d"],
+            "expectedArrival" => ["nullable", "date_format:Y-m-d"],
+            "isApproved" => ["required"],
+            "contactId" => ["required"],
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            "vendor_id" => $this->vendorId,
-            "pr_number" => $this->prNumber,
-            "pr_date" => $this->prDate,
-            "po_number" => $this->poNumber,
-            "po_date" => $this->poDate,
+            "expected_arrival" => $this->expectedArrival,
+            "is_approved" => $this->isApproved,
+            "contact_id" => $this->contactId
         ]);
     }
 }

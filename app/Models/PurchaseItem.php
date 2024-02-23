@@ -12,8 +12,7 @@ class PurchaseItem extends Model
 
     protected $fillable = [
         "quantity",
-        "pr_price",
-        "po_price",
+        "price",
         "discount",
         "tax",
         "purchase_id",
@@ -28,10 +27,5 @@ class PurchaseItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function vendor(): BelongsTo
-    {
-        return $this->belongsTo(Vendor::class);
     }
 }

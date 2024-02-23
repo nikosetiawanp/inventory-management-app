@@ -24,24 +24,23 @@ class UpdateDebtRequest extends FormRequest
         $method = $this->method();
         if ($method === "PUT") {
             return [
-                "debtAmount" => ["required"],
-                "status" => ["required"],
-                "paidDate" => ["nullable", "date_format:Y-m-d"],
-                "receiptNumber" => ["nullable"],
-                "paidAmount" => ["nullable"],
-                "balance" => ["required"],
+                "amount" => ["required"],
+                "isPaid" => ["required"],
                 "invoiceId" => ["required"],
             ];
         } else {
             return [
-                "debtAmount" => ["sometimes", "required"],
-                "status" => ["sometimes", "required"],
-                "paidDate" => ["nullable", "date_format:Y-m-d"],
-                "receiptNumber" => ["nullable"],
-                "paidAmount" => ["nullable"],
-                "balance" => ["sometimes", "required"],
-                "invoiceId" => ["sometimes", "required"],
+                "amount" => ["required"],
+                "isPaid" => ["required"],
+                "invoiceId" => ["required"],
             ];
         }
+    }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            "is_paid" => $this->isPaid,
+            "invoice_id" => $this->invoiceId
+        ]);
     }
 }

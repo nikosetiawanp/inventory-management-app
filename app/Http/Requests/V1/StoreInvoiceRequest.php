@@ -22,10 +22,9 @@ class StoreInvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "invoiceNumber" => ["required"],
+            "number" => ["required"],
             "date" => ["required", "date_format:Y-m-d"],
             "dueDate" => ["required", "date_format:Y-m-d"],
-            "totalDebt" => ["required"],
             "purchaseId" => ["required"],
             "inventoryId" => ["required"]
         ];
@@ -34,19 +33,9 @@ class StoreInvoiceRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "invoice_number" => $this->invoiceNumber,
             "due_date" => $this->dueDate,
-            "total_debt" => $this->totalDebt,
             "purchase_id" => $this->purchaseId,
             "inventory_id" => $this->inventoryId
         ]);
     }
 }
-
-
-// $table->string('invoice_number');
-// $table->dateTime('date');
-// $table->dateTime('due_date');
-// $table->decimal('total_debt');
-// $table->string('purchase_id');
-// $table->string('inventory_id');

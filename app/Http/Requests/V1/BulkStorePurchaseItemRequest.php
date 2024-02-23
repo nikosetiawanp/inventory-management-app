@@ -23,19 +23,11 @@ class BulkStorePurchaseItemRequest extends FormRequest
     {
         return [
             "*.quantity" => ["required", "integer"],
-            "*.prPrice" => ["required", "numeric"],
-            "*.poPrice" => ["sometimes", "numeric"],
+            "*.price" => ["required", "numeric"],
             "*.discount" => ["required", "numeric"],
             "*.tax" => ["required", "numeric"],
             "*.purchaseId" => ["required"],
             "*.productId" => ["required"],
-            // "*.quantity" => ["required", "integer"],
-            // "*.pr_price" => ["required", "numeric"],
-            // "*.po_price" => ["sometimes", "nullable", "numeric"],
-            // "*.discount" => ["required", "numeric"],
-            // "*.tax" => ["required", "numeric"],
-            // "*.purchase_id" => ["required"],
-            // "*.product_id" => ["required"],
         ];
     }
 
@@ -45,9 +37,6 @@ class BulkStorePurchaseItemRequest extends FormRequest
         foreach ($this->toArray() as $obj) {
             $obj["purchase_id"] = $obj["purchaseId"] ?? null;
             $obj["product_id"] = $obj["productId"] ?? null;
-            $obj["pr_price"] = $obj["prPrice"] ?? null;
-            $obj["po_price"] = $obj["poPrice"] ?? null;
-
             $data[] = $obj;
         }
 

@@ -38,7 +38,7 @@ class InventoryItemController extends Controller
     {
         // Extract common fields from each item in the bulk request
         $commonFields = collect($request->all())->map(function ($arr) {
-            return Arr::except($arr, ['stockAfter', 'inventoryId', 'productId']);
+            return Arr::except($arr, ['inventoryId', 'productId']);
         })->toArray();
 
         // Get product IDs from the bulk request
@@ -64,7 +64,6 @@ class InventoryItemController extends Controller
                 'quantity' => $item['quantity'],
                 'inventory_id' => $item['inventoryId'],
                 'product_id' => $item['productId'],
-                'stock_after' => $updatedQuantity,
             ]);
 
             // Create and return the new InventoryItem
@@ -73,11 +72,6 @@ class InventoryItemController extends Controller
 
         // Respond with the new InventoryItems
         return new InventoryItemCollection($inventoryItems);
-        //OLD
-        // $bulk = collect($request->all())->map(function ($arr, $key) {
-        //     return Arr::except($arr, ["stockAfter", "inventoryId", "productId"]);
-        // });
-        // InventoryItem::insert($bulk->toArray());
     }
 
     /**
@@ -101,7 +95,6 @@ class InventoryItemController extends Controller
             'quantity' => $request->input('quantity'),
             'inventory_id' => $request->input('inventoryId'),
             'product_id' => $request->input('productId'),
-            'stock_after' => $updatedQuantity,
         ]);
 
         // Respond with the new InventoryItem

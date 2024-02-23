@@ -23,22 +23,21 @@ class StoreInventoryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "number" => ["required"],
             "date" => ["required", "date_format:Y-m-d"],
-            "letterNumber" => ["required"],
-            "type" => ["required", Rule::in(['A', 'D'])],
+            "isArrival" => ["required"],
+            "receiptNumber" => ["required"],
             "description" => ["nullable"],
             "purchaseId" => ["required"],
-            "invoiceNumber" => ["sometimes"],
-            // "dueDate" => ["date_format:Y-m-d"]
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            "letter_number" => $this->letterNumber,
+            "is_arrival" => $this->isArrival,
+            "receipt_number" => $this->receiptNumber,
             "purchase_id" => $this->purchaseId,
-            "invoice_number" => $this->invoiceNumber,
         ]);
     }
 }

@@ -25,23 +25,21 @@ class UpdateInventoryRequest extends FormRequest
         $method = $this->method();
         if ($method === "PUT") {
             return [
+                "number" => ["required"],
                 "date" => ["required", "date_format:Y-m-d"],
-                "letterNumber" => ["required"],
-                "type" => ["required", Rule::in(['A', 'D'])],
+                "isArrival" => ["required"],
+                "receiptNumber" => ["required"],
                 "description" => ["nullable"],
                 "purchaseId" => ["required"],
-                "invoiceNumber" => ["required"],
-                "dueDate" => ["required", "date_format:Y-m-d"]
             ];
         } else {
             return [
-                "date" => ["sometimes", "required", "date_format:Y-m-d"],
-                "letterNumber" => ["sometimes", "required"],
-                "type" => ["sometimes", "required", Rule::in(['A', 'D'])],
+                "number" => ["sometimes"],
+                "date" => ["sometimes", "date_format:Y-m-d"],
+                "isArrival" => ["sometimes"],
+                "receiptNumber" => ["sometimes"],
                 "description" => ["nullable"],
-                "purchaseId" => ["sometimes", "required"],
-                "invoiceNumber" => ["sometimes"],
-                "dueDate" => ["sometimes", "date_format:Y-m-d"]
+                "purchaseId" => ["sometimes"],
             ];
         }
     }
@@ -49,9 +47,9 @@ class UpdateInventoryRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "letter_number" => $this->letterNumber,
+            "is_arrival" => $this->isArrival,
+            "receipt_number" => $this->receiptNumber,
             "purchase_id" => $this->purchaseId,
-            "invoice_number" => $this->invoiceNumber,
         ]);
     }
 }

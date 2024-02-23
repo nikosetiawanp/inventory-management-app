@@ -12,17 +12,15 @@ class Purchase extends Model
     use HasFactory;
 
     protected $fillable = [
-        "vendor_id",
-        "pr_number",
-        "pr_date",
-        "po_number",
-        "po_date",
-        "status"
+        "number",
+        "date",
+        "is_approved",
+        "contact_id"
     ];
 
-    public function vendor(): BelongsTo
+    public function contact(): BelongsTo
     {
-        return $this->belongsTo(Vendor::class);
+        return $this->belongsTo(Contact::class);
     }
 
     public function purchaseItems(): HasMany

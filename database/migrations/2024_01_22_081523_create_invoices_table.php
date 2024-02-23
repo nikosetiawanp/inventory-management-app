@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_number');
+            $table->string('number');
             $table->dateTime('date');
             $table->dateTime('due_date');
-            $table->decimal('total_debt');
             $table->string('purchase_id');
             $table->string('inventory_id');
             $table->timestamps();

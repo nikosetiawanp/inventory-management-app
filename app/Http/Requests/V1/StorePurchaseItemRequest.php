@@ -23,8 +23,7 @@ class StorePurchaseItemRequest extends FormRequest
     {
         return [
             "quantity" => ["required"],
-            "prPrice" => ["required"],
-            "poPrice" => ["sometimes"],
+            "price" => ["required"],
             "discount" => ["required"],
             "tax" => ["required"],
             "purchaseId" => ["required"],
@@ -35,8 +34,6 @@ class StorePurchaseItemRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "po_price" => $this->poPrice,
-            "pr_price" => $this->prPrice,
             "purchase_id" => $this->purchaseId,
             "product_id" => $this->productId,
         ]);

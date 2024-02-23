@@ -25,8 +25,7 @@ class UpdatePurchaseItemRequest extends FormRequest
         if ($method === "PUT") {
             return [
                 "quantity" => ["required"],
-                "prPrice" => ["required"],
-                "poPrice" => ["sometimes"],
+                "price" => ["required"],
                 "discount" => ["required"],
                 "tax" => ["required"],
                 "purchaseId" => ["required"],
@@ -35,8 +34,7 @@ class UpdatePurchaseItemRequest extends FormRequest
         } else {
             return [
                 "quantity" => ["sometimes", "required"],
-                "prPrice" => ["sometimes", "required"],
-                "poPrice" => ["sometimes"],
+                "price" => ["sometimes", "required"],
                 "discount" => ["sometimes", "required"],
                 "tax" => ["sometimes", "required"],
                 "purchaseId" => ["sometimes", "required"],
@@ -48,8 +46,6 @@ class UpdatePurchaseItemRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "po_price" => $this->poPrice,
-            "pr_price" => $this->prPrice,
             "purchase_id" => $this->purchaseId,
             "product_id" => $this->productId,
         ]);

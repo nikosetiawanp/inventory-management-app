@@ -15,6 +15,7 @@ class Purchase extends Model
         "number",
         "date",
         "is_approved",
+        "is_done",
         "contact_id"
     ];
 

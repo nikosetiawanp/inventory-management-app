@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\PurchaseItemController;
 use App\Http\Controllers\Api\V1\InventoryItemController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('inventory-items', InventoryItemController::class);
     Route::apiResource('invoices', InvoiceController::class);
     Route::apiResource('debts', DebtController::class);
+    Route::apiResource('payments', PaymentController::class);
     Route::apiResource('debt-payments', DebtPaymentController::class);
 
     Route::post('purchase-items/bulk', ['uses' => 'PurchaseItemController@bulkStore']);

@@ -23,7 +23,6 @@ class BulkStoreInventoryItemRequest extends FormRequest
     {
         return [
             "*.quantity" => ["required", "integer"],
-            "*.stockAfter" => ["required", "numeric"],
             "*.inventoryId" => ["required"],
             "*.productId" => ["required"],
         ];

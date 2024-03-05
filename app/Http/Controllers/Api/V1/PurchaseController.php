@@ -17,16 +17,33 @@ class PurchaseController extends Controller
      */
     public function index(Request $request)
     {
-        // NEW
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
-        $status = $request->input("status");
+        $isApproved = $request->input("isApproved");
+        $isDone = $request->input("isDone");
 
-        return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])
-            ->where('status', $status)
-            ->with(['vendor'])
-            ->paginate());
-        // return new PurchaseCollection(Purchase::whereBetween('pr_date', [$startDate, $endDate])->where('status', $status)->with(['items.product', 'vendor'])->paginate());
+        // return new PurchaseCollection(Purchase::whereBetween('date', [$startDate, $endDate])
+        // ->where('is_approved', $isApproved)
+        // ->where('is_done', $isDone)
+        // ->with(['contact'])
+        // ->get());
+
+        if ($isApproved) {
+            return new PurchaseCollection(Purchase::whereBetween('date', [$startDate, $endDate])
+                ->where('is_approved', $isApproved)
+                ->with(['contact', 'inventories'])
+                ->get());
+        } else if ($isDone) {
+            return new PurchaseCollection(Purchase::whereBetween('date', [$startDate, $endDate])
+                ->where('is_approved', $isApproved)
+                ->where('is_done', $isDone)
+                ->with(['contact', 'inventories'])
+                ->get());
+        } else {
+            return new PurchaseCollection(Purchase::whereBetween('date', [$startDate, $endDate])
+                ->with(['contact'])
+                ->paginate());
+        }
     }
 
     /**

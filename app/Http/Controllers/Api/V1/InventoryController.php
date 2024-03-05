@@ -19,18 +19,18 @@ class InventoryController extends Controller
     {
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
-        $type = $request->input("type");
+        $isArrival = $request->input("isArrival");
         $purchaseId = $request->input("purchaseId");
 
         if ($request->has('purchaseId')) {
             return new InventoryCollection(Inventory::where('purchase_id', $purchaseId)
                 ->with(['inventoryItems'])
-                ->paginate());
+                ->get());
         } else {
             return new InventoryCollection(Inventory::whereBetween('date', [$startDate, $endDate])
-                ->where('type', $type)
-                ->with(['purchase.vendor', 'inventoryItems'])
-                ->paginate());
+                ->where('is_arrival', $isArrival)
+                ->with(['purchase.contact', 'purchase.purchaseItems.product', 'inventoryItems'])
+                ->get());
         }
     }
 

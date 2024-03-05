@@ -125,7 +125,8 @@ class InventoryItemController extends Controller
      */
     public function update(UpdateInventoryItemRequest $request, InventoryItem $inventoryItem)
     {
-        //
+        $inventoryItem->update($request->all());
+        return new InventoryItemResource($inventoryItem);
     }
 
     /**

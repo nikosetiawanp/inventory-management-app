@@ -27,6 +27,7 @@ class StorePurchaseRequest extends FormRequest
             "date" => ["required", "date_format:Y-m-d"],
             "expectedArrival" => ["nullable", "date_format:Y-m-d"],
             "isApproved" => ["required"],
+            "isDone" => ["required"],
             "contactId" => ["required"],
         ];
     }
@@ -36,6 +37,7 @@ class StorePurchaseRequest extends FormRequest
         $this->merge([
             "expected_arrival" => $this->expectedArrival,
             "is_approved" => $this->isApproved,
+            "is_done" => $this->isDone,
             "contact_id" => $this->contactId
         ]);
     }

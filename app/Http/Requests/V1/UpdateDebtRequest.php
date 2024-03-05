@@ -27,12 +27,14 @@ class UpdateDebtRequest extends FormRequest
                 "amount" => ["required"],
                 "isPaid" => ["required"],
                 "invoiceId" => ["required"],
+                "contactId" => ["required"]
             ];
         } else {
             return [
-                "amount" => ["required"],
-                "isPaid" => ["required"],
-                "invoiceId" => ["required"],
+                "amount" => ["sometimes"],
+                "isPaid" => ["sometimes"],
+                "invoiceId" => ["sometimes"],
+                "contactId" => ["sometimes"]
             ];
         }
     }
@@ -40,7 +42,8 @@ class UpdateDebtRequest extends FormRequest
     {
         $this->merge([
             "is_paid" => $this->isPaid,
-            "invoice_id" => $this->invoiceId
+            "invoice_id" => $this->invoiceId,
+            "contact_id" => $this->contactId
         ]);
     }
 }

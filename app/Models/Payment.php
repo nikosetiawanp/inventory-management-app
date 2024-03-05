@@ -21,8 +21,8 @@ class Payment extends Model
         return $this->belongsTo(Debt::class);
     }
 
-    public function contact(): BelongsTo
-    {
-        return $this->belongsTo(Contact::class);
-    }
+    // public function contact(): BelongsTo
+    // {
+    //     return $this->belongsTo(Contact::class);
+    // }
 }

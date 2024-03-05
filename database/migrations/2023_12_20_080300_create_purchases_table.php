@@ -17,6 +17,7 @@ return new class extends Migration
             $table->dateTime('date');
             $table->dateTime('expected_arrival')->nullable();
             $table->boolean('is_approved');
+            $table->boolean('is_done');
             $table->unsignedBigInteger('contact_id');
             $table->timestamps();
 

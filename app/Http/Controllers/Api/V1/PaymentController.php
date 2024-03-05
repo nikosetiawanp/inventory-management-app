@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StorePaymentRequest;
 use App\Http\Requests\V1\UpdatePaymentRequest;
+use App\Http\Resources\V1\PaymentCollection;
+use App\Http\Resources\V1\PaymentResource;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -17,6 +19,9 @@ class PaymentController extends Controller
     {
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
+
+        return new PaymentCollection(Payment::with(['debt.invoice'])
+            ->get());
     }
 
     /**
@@ -32,7 +37,7 @@ class PaymentController extends Controller
      */
     public function store(StorePaymentRequest $request)
     {
-        //
+        return new PaymentResource(Payment::create($request->all()));
     }
 
     /**

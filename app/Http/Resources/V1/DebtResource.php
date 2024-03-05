@@ -22,7 +22,7 @@ class DebtResource extends JsonResource
             "contactId" => $this->contact_id,
 
             "invoice" => new InvoiceResource($this->whenLoaded("invoice")),
-            "debtPayments" => DebtPaymentResource::collection($this->whenLoaded("debtPayments")),
+            "payments" => PaymentResource::collection($this->whenLoaded("payments")),
         ];
     }
 }

@@ -30,6 +30,7 @@ class UpdatePurchaseRequest extends FormRequest
                 "date" => ["required", "date_format:Y-m-d"],
                 "expectedArrival" => ["nullable", "date_format:format:Y-m-d"],
                 "isApproved" => ["required"],
+                "isDone" => ["required"],
                 "contactId" => ["required"],
             ];
         } else {
@@ -38,6 +39,7 @@ class UpdatePurchaseRequest extends FormRequest
                 "date" => ["sometimes", "date_format:Y-m-d"],
                 "expectedArrival" => ["nullable", "date_format:format:Y-m-d"],
                 "isApproved" => ["sometimes"],
+                "isDone" => ["done"],
                 "contactId" => ["sometimes"],
             ];
         }
@@ -47,6 +49,7 @@ class UpdatePurchaseRequest extends FormRequest
         $this->merge([
             "expected_arrival" => $this->expectedArrival,
             "is_approved" => $this->isApproved,
+            "is_done" => $this->isDone,
             "contact_id" => $this->contactId
         ]);
     }

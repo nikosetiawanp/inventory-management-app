@@ -20,9 +20,11 @@ class PurchaseResource extends JsonResource
             "date" => $this->date,
             "expectedArrival" => $this->expected_arrival,
             "isApproved" => $this->is_approved,
+            "isDone" => $this->is_done,
             "contactId" => $this->contact_id,
             "contact" => new ContactResource($this->whenLoaded("contact")),
             "purchaseItems" => PurchaseItemResource::collection($this->whenLoaded("purchaseItems")),
+            "inventories" => InventoryItemResource::collection($this->whenLoaded("inventories"))
         ];
     }
 }

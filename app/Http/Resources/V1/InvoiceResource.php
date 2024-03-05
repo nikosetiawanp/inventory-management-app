@@ -21,8 +21,10 @@ class InvoiceResource extends JsonResource
             "dueDate" => $this->due_date,
             "purchaseId" => $this->purchase_id,
             "inventoryId" => $this->inventory_id,
+
             "purchase" => new PurchaseResource($this->whenLoaded("purchase")),
             "inventory" => new InventoryResource($this->whenLoaded("inventory")),
+            "debts" => DebtResource::collection($this->whenLoaded("debts")),
         ];
     }
 }

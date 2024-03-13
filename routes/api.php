@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AccountController;
+use App\Http\Controllers\Api\V1\CashController;
 use App\Http\Controllers\Api\V1\DebtController;
 use App\Http\Controllers\Api\V1\DebtPaymentController;
 use App\Http\Controllers\Api\V1\InventoryController;
@@ -41,6 +43,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('debts', DebtController::class);
     Route::apiResource('payments', PaymentController::class);
     Route::apiResource('debt-payments', DebtPaymentController::class);
+
+    Route::apiResource('cashes', CashController::class);
+    Route::apiResource('accounts', AccountController::class);
+
 
     Route::post('purchase-items/bulk', ['uses' => 'PurchaseItemController@bulkStore']);
     Route::post('inventory-items/bulk', ['uses' => 'InventoryItemController@bulkStore']);

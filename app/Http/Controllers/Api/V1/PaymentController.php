@@ -8,6 +8,7 @@ use App\Http\Requests\V1\UpdatePaymentRequest;
 use App\Http\Resources\V1\PaymentCollection;
 use App\Http\Resources\V1\PaymentResource;
 use App\Models\Payment;
+use App\Models\Cash;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -37,7 +38,34 @@ class PaymentController extends Controller
      */
     public function store(StorePaymentRequest $request)
     {
-        return new PaymentResource(Payment::create($request->all()));
+        // return new PaymentResource(Payment::create($request->all()));
+        // $payment = Payment::create($request->all());
+
+        // Cash::create([
+        //     'amount' => $request->amount,
+        //     'account_id' => $request->accountId
+        // ]);
+
+        // return new PaymentResource($payment);
+
+        try {
+            $payment = Payment::create($request->all());
+
+            Cash::create([
+                'date' => $request->date,
+                'number' => $request->number,
+                'amount' => $request->amount,
+                'description' => $request->description,
+                'account_id' => $request->accountId
+            ]);
+
+            return new PaymentResource($payment);
+        } catch (\Exception $e) {
+            // Log the exception message for debugging
+            logger()->error('Error creating cash record: ' . $e->getMessage());
+            // Return appropriate response indicating failure
+            return response()->json(['message' => 'Failed to create cash record'], 500);
+        }
     }
 
     /**
@@ -69,6 +97,8 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
-        //
+        if ($payment) {
+            $payment->delete();
+        }
     }
 }

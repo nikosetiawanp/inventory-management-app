@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\V1\InventoryItemController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\TransactionController;
+use App\Http\Controllers\Api\V1\TransactionItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +38,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('vendors', VendorController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('purchases', PurchaseController::class);
+    Route::apiResource('transactions', TransactionController::class);
+    Route::apiResource('transaction-items', TransactionItemController::class);
     Route::apiResource('purchase-items', PurchaseItemController::class);
     Route::apiResource('inventories', InventoryController::class);
     Route::apiResource('inventory-items', InventoryItemController::class);

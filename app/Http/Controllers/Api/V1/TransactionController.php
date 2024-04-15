@@ -8,6 +8,7 @@ use App\Http\Requests\V1\UpdateTransactionRequest;
 use App\Http\Resources\V1\TransactionCollection;
 use App\Http\Resources\V1\TransactionResource;
 use App\Models\Transaction;
+use App\Services\V1\TransactionQuery;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -23,23 +24,35 @@ class TransactionController extends Controller
         $isDone = $request->input("isDone");
         $type = $request->input("type");
 
-        if ($isApproved) {
-            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-                ->where('is_approved', $isApproved)
-                ->with(['contact', 'inventories'])
-                ->get());
-        } else if ($isDone) {
-            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-                ->where('is_approved', $isApproved)
-                ->where('is_done', $isDone)
-                ->with(['contact', 'inventories'])
-                ->get());
-        } else {
-            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-                ->with(['contact'])
-                ->paginate());
-        }
+        // if ($isApproved) {
+        //     return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
+        //         ->where('is_approved', $isApproved)
+        //         ->with(['contact', 'inventories'])
+        //         ->get());
+        // } else if ($isDone) {
+        return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
+            ->where('is_approved', $isApproved)
+            ->where('is_done', $isDone)
+            ->with(['contact', 'inventories'])
+            ->paginate());
+        // } else {
+        //     return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
+        //         ->with(['contact'])
+        //         ->paginate());
+        // }
     }
+
+    // public function index(Request $request)
+    // {
+    //     $filter = new TransactionQuery();
+    //     $queryItems = $filter->transform($request);
+
+    //     if (count($queryItems) == 0) {
+    //         return new TransactionCollection(Transaction::paginate());
+    //     } else {
+    //         return new TransactionCollection(Transaction::where($queryItems)->paginate());
+    //     }
+    // }
 
     /**
      * Show the form for creating a new resource.

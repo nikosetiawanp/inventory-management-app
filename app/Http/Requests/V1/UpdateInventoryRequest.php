@@ -30,7 +30,7 @@ class UpdateInventoryRequest extends FormRequest
                 "isArrival" => ["required"],
                 "receiptNumber" => ["required"],
                 "description" => ["nullable"],
-                "purchaseId" => ["required"],
+                "transactionId" => ["required"],
             ];
         } else {
             return [
@@ -39,7 +39,7 @@ class UpdateInventoryRequest extends FormRequest
                 "isArrival" => ["sometimes"],
                 "receiptNumber" => ["sometimes"],
                 "description" => ["nullable"],
-                "purchaseId" => ["sometimes"],
+                "transactionId" => ["sometimes"],
             ];
         }
     }
@@ -49,7 +49,7 @@ class UpdateInventoryRequest extends FormRequest
         $this->merge([
             "is_arrival" => $this->isArrival,
             "receipt_number" => $this->receiptNumber,
-            "purchase_id" => $this->purchaseId,
+            "transaction_id" => $this->transactionId,
         ]);
     }
 }

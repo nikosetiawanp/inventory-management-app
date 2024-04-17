@@ -23,7 +23,7 @@ class ContactResource extends JsonResource
             'province' => $this->province,
             'city' => $this->city,
             'address' => $this->address,
-            'isSupplier' => $this->is_supplier
+            'type' => $this->type
         ];
     }
 }

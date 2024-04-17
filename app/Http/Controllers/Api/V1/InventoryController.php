@@ -20,16 +20,16 @@ class InventoryController extends Controller
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
         $isArrival = $request->input("isArrival");
-        $purchaseId = $request->input("purchaseId");
+        $transactionId = $request->input("tansactionId");
 
-        if ($request->has('purchaseId')) {
-            return new InventoryCollection(Inventory::where('purchase_id', $purchaseId)
+        if ($request->has('tansactionId')) {
+            return new InventoryCollection(Inventory::where('tansaction_id', $transactionId)
                 ->with(['inventoryItems'])
                 ->get());
         } else {
             return new InventoryCollection(Inventory::whereBetween('date', [$startDate, $endDate])
                 ->where('is_arrival', $isArrival)
-                ->with(['purchase.contact', 'purchase.purchaseItems.product', 'inventoryItems'])
+                ->with(['tansaction.contact', 'tansaction.tansactionItems.product', 'inventoryItems'])
                 ->get());
         }
     }

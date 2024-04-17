@@ -21,9 +21,9 @@ class InventoryResource extends JsonResource
             "isArrival" => $this->is_arrival,
             "receiptNumber" => $this->receipt_number,
             "description" => $this->description,
-            "purchaseId" => $this->purchase_id,
+            "transactionId" => $this->transaction_id,
 
-            "purchase" => new PurchaseResource($this->whenLoaded("purchase")),
+            "transaction" => new TransactionResource($this->whenLoaded("transaction")),
             "inventoryItems" => InventoryItemResource::collection($this->whenLoaded("inventoryItems")),
         ];
     }

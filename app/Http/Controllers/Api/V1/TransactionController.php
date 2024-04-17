@@ -51,9 +51,14 @@ class TransactionController extends Controller
         $endDate = $request->input("endDate");
 
         if (count($queryItems) == 0) {
-            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])->paginate());
+            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
+                ->with(['contact', 'inventories'])
+                ->paginate());
         } else {
-            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])->where($queryItems)->paginate());
+            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
+                ->with(['contact', 'inventories'])
+                ->where($queryItems)
+                ->paginate());
         }
     }
 

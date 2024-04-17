@@ -8,15 +8,23 @@ use App\Http\Requests\V1\UpdateContactRequest;
 use App\Http\Resources\V1\ContactCollection;
 use App\Http\Resources\V1\ContactResource;
 use App\Models\Contact;
+use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new ContactCollection(Contact::all());
+        $type = $request->input("type");
+
+        if (!isset($type)) {
+            return new ContactCollection(Contact::all());
+        } else {
+            return new ContactCollection(Contact::where('type', $type)
+                ->get());
+        }
     }
 
     /**

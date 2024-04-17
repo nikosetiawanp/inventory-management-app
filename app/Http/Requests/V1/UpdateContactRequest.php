@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateContactRequest extends FormRequest
 {
@@ -31,7 +32,7 @@ class UpdateContactRequest extends FormRequest
                 "province" => ["nullable"],
                 "city" => ["nullable"],
                 "address" => ["nullable"],
-                "isSupplier" => ["required"]
+                "type" => ["required", Rule::in(['V', 'C'])]
             ];
         } else {
             return [
@@ -42,15 +43,8 @@ class UpdateContactRequest extends FormRequest
                 "province" => ["nullable"],
                 "city" => ["nullable"],
                 "address" => ["nullable"],
-                "isSupplier" => ["sometimes"]
+                "type" => ["sometimes", Rule::in(['V', 'C'])]
             ];
         }
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            "is_supplier" => $this->isSupplier,
-        ]);
     }
 }

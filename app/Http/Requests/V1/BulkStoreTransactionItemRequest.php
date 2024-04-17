@@ -26,7 +26,7 @@ class BulkStoreTransactionItemRequest extends FormRequest
             "*.price" => ["required", "numeric"],
             "*.discount" => ["required", "numeric"],
             "*.tax" => ["required", "numeric"],
-            "*.purchaseId" => ["required"],
+            "*.transactionId" => ["required"],
             "*.productId" => ["required"],
         ];
     }
@@ -35,7 +35,7 @@ class BulkStoreTransactionItemRequest extends FormRequest
     {
         $data = [];
         foreach ($this->toArray() as $obj) {
-            $obj["purchase_id"] = $obj["purchaseId"] ?? null;
+            $obj["transaction_id"] = $obj["transactionId"] ?? null;
             $obj["product_id"] = $obj["productId"] ?? null;
             $data[] = $obj;
         }

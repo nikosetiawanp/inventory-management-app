@@ -53,5 +53,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
 
 
     Route::post('purchase-items/bulk', ['uses' => 'PurchaseItemController@bulkStore']);
+    Route::post('transaction-items/bulk', ['uses' => 'TransactionItemController@bulkStore']);
     Route::post('inventory-items/bulk', ['uses' => 'InventoryItemController@bulkStore']);
 });

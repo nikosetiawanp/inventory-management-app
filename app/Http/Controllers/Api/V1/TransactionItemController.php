@@ -20,7 +20,9 @@ class TransactionItemController extends Controller
     public function index(Request $request)
     {
         $transactionId = $request->input("transactionId");
-        return new TransactionItemCollection(TransactionItem::where('transaction_id', $transactionId)->with(['product'])->get());
+        return new TransactionItemCollection(TransactionItem::where('transaction_id', $transactionId)
+            ->with(['product'])
+            ->get());
     }
 
     /**
@@ -33,14 +35,13 @@ class TransactionItemController extends Controller
 
     public function bulkStore(BulkStoreTransactionItemRequest $request)
     {
-
         $bulk = collect($request->all())->map(function ($arr, $key) {
             return Arr::only($arr, [
                 "quantity",
                 "price",
                 "discount",
                 "tax",
-                "purchase_id",
+                "transaction_id",
                 "product_id"
             ]);
         });

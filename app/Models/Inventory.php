@@ -17,12 +17,12 @@ class Inventory extends Model
         "is_arrival",
         "receipt_number",
         "description",
-        "purchase_id",
+        "transaction_id",
     ];
 
-    public function purchase(): BelongsTo
+    public function transaction(): BelongsTo
     {
-        return $this->belongsTo(Purchase::class);
+        return $this->belongsTo(Transaction::class);
     }
 
     public function inventoryItems(): HasMany

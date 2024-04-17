@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreContactRequest extends FormRequest
 {
@@ -29,14 +30,7 @@ class StoreContactRequest extends FormRequest
             "province" => ["nullable"],
             "city" => ["nullable"],
             "address" => ["nullable"],
-            "isSupplier" => ["required"]
+            "type" => ["required", Rule::in(['V', 'C'])]
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            "is_supplier" => $this->isSupplier,
-        ]);
     }
 }

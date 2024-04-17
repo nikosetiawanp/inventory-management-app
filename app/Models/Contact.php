@@ -17,6 +17,6 @@ class Contact extends Model
         "province",
         "city",
         "address",
-        "is_supplier"
+        "type"
     ];
 }

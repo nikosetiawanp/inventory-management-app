@@ -28,7 +28,7 @@ class StoreInventoryRequest extends FormRequest
             "isArrival" => ["required"],
             "receiptNumber" => ["required"],
             "description" => ["nullable"],
-            "purchaseId" => ["required"],
+            "transactionId" => ["required"],
         ];
     }
 
@@ -37,7 +37,7 @@ class StoreInventoryRequest extends FormRequest
         $this->merge([
             "is_arrival" => $this->isArrival,
             "receipt_number" => $this->receiptNumber,
-            "purchase_id" => $this->purchaseId,
+            "transaction_id" => $this->transactionId,
         ]);
     }
 }

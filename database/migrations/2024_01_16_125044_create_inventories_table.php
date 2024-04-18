@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('number');
             $table->dateTime('date');
-            $table->boolean('is_arrival');
+            $table->string('type');
             $table->string('receipt_number')->nullable();
             $table->string('description')->nullable();
             $table->integer('transaction_id');

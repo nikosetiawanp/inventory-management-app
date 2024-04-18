@@ -27,7 +27,7 @@ class UpdateInventoryRequest extends FormRequest
             return [
                 "number" => ["required"],
                 "date" => ["required", "date_format:Y-m-d"],
-                "isArrival" => ["required"],
+                "type" => ["required", Rule::in(['A', 'D'])],
                 "receiptNumber" => ["required"],
                 "description" => ["nullable"],
                 "transactionId" => ["required"],
@@ -36,7 +36,7 @@ class UpdateInventoryRequest extends FormRequest
             return [
                 "number" => ["sometimes"],
                 "date" => ["sometimes", "date_format:Y-m-d"],
-                "isArrival" => ["sometimes"],
+                "type" => ["sometimes", Rule::in(['A', 'D'])],
                 "receiptNumber" => ["sometimes"],
                 "description" => ["nullable"],
                 "transactionId" => ["sometimes"],
@@ -47,7 +47,6 @@ class UpdateInventoryRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            "is_arrival" => $this->isArrival,
             "receipt_number" => $this->receiptNumber,
             "transaction_id" => $this->transactionId,
         ]);

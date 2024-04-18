@@ -78,7 +78,8 @@ class TransactionItemController extends Controller
      */
     public function update(UpdateTransactionItemRequest $request, TransactionItem $transactionItem)
     {
-        //
+        $transactionItem->update($request->all());
+        return new TransactionItemResource($transactionItem);
     }
 
     /**

@@ -18,7 +18,7 @@ class InventoryResource extends JsonResource
             "id" => $this->id,
             "number" => $this->number,
             "date" => $this->date,
-            "isArrival" => $this->is_arrival,
+            "type" => $this->type,
             "receiptNumber" => $this->receipt_number,
             "description" => $this->description,
             "transactionId" => $this->transaction_id,

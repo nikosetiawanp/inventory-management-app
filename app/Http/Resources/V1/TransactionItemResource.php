@@ -14,6 +14,16 @@ class TransactionItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            "id" => $this->id,
+            "quantity" => $this->quantity,
+            "price" => $this->price,
+            "discount" => $this->discount,
+            "tax" => $this->tax,
+            "transactionId" => $this->transaction_id,
+            "productId" => $this->product_id,
+
+            "product" => new ProductResource($this->whenLoaded("product")),
+        ];
     }
 }

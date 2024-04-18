@@ -14,7 +14,7 @@ class Inventory extends Model
     protected $fillable = [
         "number",
         "date",
-        "is_arrival",
+        "type",
         "receipt_number",
         "description",
         "transaction_id",

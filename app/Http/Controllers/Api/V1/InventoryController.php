@@ -82,6 +82,8 @@ class InventoryController extends Controller
      */
     public function destroy(Inventory $inventory)
     {
-        //
+        if ($inventory) {
+            $inventory->delete();
+        }
     }
 }

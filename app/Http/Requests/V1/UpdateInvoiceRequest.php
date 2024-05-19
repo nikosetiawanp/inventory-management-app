@@ -27,7 +27,7 @@ class UpdateInvoiceRequest extends FormRequest
                 "number" => ["required"],
                 "date" => ["required", "date_format:Y-m-d"],
                 "dueDate" => ["required", "date_format:Y-m-d"],
-                "purchaseId" => ["required"],
+                "transactionId" => ["required"],
                 "inventoryId" => ["required"]
             ];
         } else {
@@ -35,7 +35,7 @@ class UpdateInvoiceRequest extends FormRequest
                 "number" => ["sometimes"],
                 "date" => ["sometimes", "date_format:Y-m-d"],
                 "dueDate" => ["sometimes", "date_format:Y-m-d"],
-                "purchaseId" => ["sometimes"],
+                "transactionId" => ["sometimes"],
                 "inventoryId" => ["sometimes"]
             ];
         }
@@ -45,7 +45,7 @@ class UpdateInvoiceRequest extends FormRequest
     {
         $this->merge([
             "due_date" => $this->dueDate,
-            "purchase_id" => $this->purchaseId,
+            "transaction_id" => $this->transactionId,
             "inventory_id" => $this->inventoryId
         ]);
     }

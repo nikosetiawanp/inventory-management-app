@@ -19,10 +19,9 @@ class InvoiceResource extends JsonResource
             "number" => $this->number,
             "date" => $this->date,
             "dueDate" => $this->due_date,
-            "purchaseId" => $this->purchase_id,
+            "transactionId" => $this->transaction_id,
             "inventoryId" => $this->inventory_id,
-
-            "purchase" => new PurchaseResource($this->whenLoaded("purchase")),
+            "transaction" => new TransactionResource($this->whenLoaded("transaction")),
             "inventory" => new InventoryResource($this->whenLoaded("inventory")),
             "debts" => DebtResource::collection($this->whenLoaded("debts")),
         ];

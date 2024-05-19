@@ -22,7 +22,7 @@ class InvoiceController extends Controller
 
         return new InvoiceCollection(
             Invoice::whereBetween('date', [$startDate, $endDate])
-                ->with(['purchase.contact', 'inventory', 'debts'])
+                ->with(['transaction.contact', 'inventory', 'debts'])
                 ->get()
         );
     }

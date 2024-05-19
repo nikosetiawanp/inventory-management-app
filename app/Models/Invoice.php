@@ -15,13 +15,13 @@ class Invoice extends Model
         "number",
         "date",
         "due_date",
-        "purchase_id",
+        "transaction_id",
         "inventory_id"
     ];
 
-    public function purchase(): BelongsTo
+    public function transaction(): BelongsTo
     {
-        return $this->belongsTo(Purchase::class);
+        return $this->belongsTo(Transaction::class);
     }
     public function inventory(): BelongsTo
     {

@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('number');
             $table->dateTime('date');
             $table->dateTime('due_date');
-            $table->string('purchase_id');
+            $table->string('transaction_id');
             $table->string('inventory_id');
             $table->timestamps();
 
-            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
             $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
         });
     }

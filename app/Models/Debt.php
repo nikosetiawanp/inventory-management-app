@@ -12,6 +12,7 @@ class Debt extends Model
     use HasFactory;
     protected $fillable = [
         "amount",
+        "type",
         "is_paid",
         "invoice_id",
         "contact_id"
@@ -20,6 +21,11 @@ class Debt extends Model
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function contact(): BelongsTo
+    {
+        return $this->belongsTo(Contact::class);
     }
 
     public function payments(): HasMany

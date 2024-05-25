@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('debts', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount');
+            $table->decimal('type');
             $table->boolean('is_paid');
             $table->string('invoice_id');
             $table->string('contact_id');

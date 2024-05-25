@@ -87,6 +87,8 @@ class TransactionItemController extends Controller
      */
     public function destroy(TransactionItem $transactionItem)
     {
-        //
+        if ($transactionItem) {
+            $transactionItem->delete();
+        }
     }
 }

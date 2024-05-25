@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDebtRequest extends FormRequest
 {
@@ -23,6 +24,7 @@ class StoreDebtRequest extends FormRequest
     {
         return [
             "amount" => ["required"],
+            "type" => ["required", Rule::in(['D', 'R'])],
             "isPaid" => ["required"],
             "invoiceId" => ["required"],
             "contactId" => ["required"]

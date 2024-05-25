@@ -25,6 +25,7 @@ class UpdateDebtRequest extends FormRequest
         if ($method === "PUT") {
             return [
                 "amount" => ["required"],
+                "type" => ["required"],
                 "isPaid" => ["required"],
                 "invoiceId" => ["required"],
                 "contactId" => ["required"]
@@ -32,6 +33,7 @@ class UpdateDebtRequest extends FormRequest
         } else {
             return [
                 "amount" => ["sometimes"],
+                "type" => ["sometimes"],
                 "isPaid" => ["sometimes"],
                 "invoiceId" => ["sometimes"],
                 "contactId" => ["sometimes"]

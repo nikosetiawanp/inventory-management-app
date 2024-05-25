@@ -22,18 +22,22 @@ class DebtController extends Controller
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
 
-        if ($isPaid) {
-            return new DebtCollection(
-                Debt::where('is_paid', $isPaid)
-                    ->with(['invoice.purchase.contact', 'payments'])
-                    ->paginate()
-            );
-        } else {
-            return new DebtCollection(
-                Debt::with(['invoice.purchase.contact', 'payments'])
-                    ->paginate()
-            );
-        }
+        // GET ALL
+        // return new DebtCollection(
+        //     Debt::whereBetween('invoice.date', [$startDate, $endDate])
+        //         ->with(['contact', 'payments'])
+        //         ->paginate()
+        // );
+
+
+        // GET 
+        return new DebtCollection(
+            Debt::whereHas('invoice', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('date', [$startDate, $endDate]);
+            })
+                ->with(['contact', 'payments', 'invoice'])
+                ->paginate()
+        );
     }
 
     /**

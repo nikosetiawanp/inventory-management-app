@@ -24,7 +24,7 @@ class StorePaymentRequest extends FormRequest
         return [
             "date" => ["required"],
             "amount" => ["required"],
-            "debtId" => ["required"]
+            "debtId" => ["required"],
         ];
     }
     protected function prepareForValidation()

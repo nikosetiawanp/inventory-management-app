@@ -38,34 +38,21 @@ class PaymentController extends Controller
      */
     public function store(StorePaymentRequest $request)
     {
-        // return new PaymentResource(Payment::create($request->all()));
-        // $payment = Payment::create($request->all());
-
-        // Cash::create([
-        //     'amount' => $request->amount,
-        //     'account_id' => $request->accountId
-        // ]);
-
-        // return new PaymentResource($payment);
-
-        try {
-            $payment = Payment::create($request->all());
-
-            Cash::create([
-                'date' => $request->date,
-                'number' => $request->number,
-                'amount' => $request->amount,
-                'description' => $request->description,
-                'account_id' => $request->accountId
-            ]);
-
-            return new PaymentResource($payment);
-        } catch (\Exception $e) {
-            // Log the exception message for debugging
-            logger()->error('Error creating cash record: ' . $e->getMessage());
-            // Return appropriate response indicating failure
-            return response()->json(['message' => 'Failed to create cash record'], 500);
-        }
+        return new PaymentResource(Payment::create($request->all()));
+        // try {
+        //     $payment = Payment::create($request->all());
+        //     Cash::create([
+        //         'date' => $request->date,
+        //         'number' => $request->number,
+        //         'amount' => $request->amount,
+        //         'description' => $request->description,
+        //         'account_id' => $request->accountId
+        //     ]);
+        //     return new PaymentResource($payment);
+        // } catch (\Exception $e) {
+        //     logger()->error('Error creating cash record: ' . $e->getMessage());
+        //     return response()->json(['message' => 'ERROR'], 500);
+        // }
     }
 
     /**

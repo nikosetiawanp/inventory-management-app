@@ -38,6 +38,13 @@ class CashController extends Controller
      */
     public function store(StoreCashRequest $request)
     {
+        // return new CashResource(Cash::create([
+        //     'date' => $request->date,
+        //     'number' => $request->number,
+        //     'amount' => $request->amount,
+        //     'description' => $request->description,
+        //     'account_id' => $request->accountId
+        // ]));
         return new CashResource(Cash::create($request->all()));
     }
 

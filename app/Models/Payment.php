@@ -13,7 +13,8 @@ class Payment extends Model
     protected $fillable = [
         "date",
         "amount",
-        "debt_id"
+        "debt_id",
+        "account_id"
     ];
 
     public function debt(): BelongsTo

@@ -8,6 +8,7 @@ use App\Http\Requests\V1\UpdateCashRequest;
 use App\Http\Resources\V1\CashCollection;
 use App\Http\Resources\V1\CashResource;
 use App\Models\Cash;
+use App\Models\Account;
 use Illuminate\Http\Request;
 
 class CashController extends Controller
@@ -38,13 +39,27 @@ class CashController extends Controller
      */
     public function store(StoreCashRequest $request)
     {
-        // return new CashResource(Cash::create([
-        //     'date' => $request->date,
-        //     'number' => $request->number,
-        //     'amount' => $request->amount,
-        //     'description' => $request->description,
-        //     'account_id' => $request->accountId
-        // ]));
+        $accountId = $request->accountId;
+        $account = Account::find($accountId);
+
+        var_dump($account);
+
+        if (!$account && $accountId == 1) {
+            $account = Account::create([
+                'id' => 1,
+                'number' => '21.10.10',
+                'name' => 'Hutang Dagang',
+            ]);
+        }
+
+        if (!$account && $accountId == 2) {
+            $account = Account::create([
+                'id' => 2,
+                'number' => '11.21.20',
+                'name' => 'Piutang Dagang',
+            ]);
+        }
+
         return new CashResource(Cash::create($request->all()));
     }
 

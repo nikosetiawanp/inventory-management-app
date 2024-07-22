@@ -23,7 +23,8 @@ class ContactResource extends JsonResource
             'province' => $this->province,
             'city' => $this->city,
             'address' => $this->address,
-            'type' => $this->type
+            'type' => $this->type,
+            "debts" => DebtResource::collection($this->whenLoaded("debts")),
         ];
     }
 }

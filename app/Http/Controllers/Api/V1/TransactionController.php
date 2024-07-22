@@ -50,16 +50,33 @@ class TransactionController extends Controller
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
 
-        if (count($queryItems) == 0) {
-            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-                ->with(['contact', 'inventories'])
-                ->paginate());
+
+        if ($startDate or $endDate) {
+            return new TransactionCollection(
+                Transaction::whereBetween('date', [$startDate, $endDate])
+                    ->where($queryItems)
+                    ->with(['contact', 'inventories'])
+                    ->orderBy('date', 'asc')
+                    ->paginate()
+            );
         } else {
-            return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-                ->with(['contact', 'inventories'])
-                ->where($queryItems)
-                ->paginate());
+            return new TransactionCollection(
+                Transaction::where($queryItems)
+                    ->with(['contact', 'inventories'])
+                    ->orderBy('date', 'asc')
+                    ->paginate()
+            );
         }
+        // if (count($queryItems) == 0) {
+        //     return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
+        //         ->with(['contact', 'inventories'])
+        //         ->paginate());
+        // } else {
+        //     return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
+        //         ->with(['contact', 'inventories'])
+        //         ->where($queryItems)
+        //         ->paginate());
+        // }
     }
 
     /**

@@ -23,6 +23,9 @@ class ContactController extends Controller
             return new ContactCollection(Contact::all());
         } else {
             return new ContactCollection(Contact::where('type', $type)
+                ->with(['debts' => function ($query) {
+                    $query->where('is_paid', false);
+                }])
                 ->get());
         }
     }

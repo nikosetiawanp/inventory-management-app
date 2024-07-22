@@ -25,6 +25,7 @@ class InventoryResource extends JsonResource
 
             "transaction" => new TransactionResource($this->whenLoaded("transaction")),
             "inventoryItems" => InventoryItemResource::collection($this->whenLoaded("inventoryItems")),
+            "invoices" => InvoiceResource::collection($this->whenLoaded("invoices"))
         ];
     }
 }

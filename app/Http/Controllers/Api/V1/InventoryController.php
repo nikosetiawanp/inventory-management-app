@@ -24,12 +24,12 @@ class InventoryController extends Controller
 
         if ($request->has('transactionId')) {
             return new InventoryCollection(Inventory::where('transaction_id', $transactionId)
-                ->with(['inventoryItems'])
+                ->with(['inventoryItems', 'invoices'])
                 ->get());
         } else {
             return new InventoryCollection(Inventory::whereBetween('date', [$startDate, $endDate])
                 ->where('type', $type)
-                ->with(['transaction.contact', 'transaction.transactionItems.product', 'inventoryItems'])
+                ->with(['transaction.contact', 'transaction.transactionItems.product', 'inventoryItems', 'invoices'])
                 ->get());
         }
     }

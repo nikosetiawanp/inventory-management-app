@@ -34,24 +34,31 @@ class TransactionQuery
             }
 
             $column = $this->columnMap[$param] ?? $param;
-
             foreach ($operators as $operator) {
-                // Check if the query parameter exists and is not empty
-                if (isset($query) && !empty($query)) {
-                    // Adjust the condition based on the operator
-                    switch ($operator) {
-                        case 'eq':
-                            $eloQuery[] = [$column, '=', $query];
-                            break;
-                        default:
-                            break;
-                    }
+                // Adjust the condition based on the operator
+                switch ($operator) {
+                    case 'eq':
+                        $eloQuery[] = [$column, '=', $query];
+                        break;
+                    default:
+                        break;
                 }
+
+                // foreach ($operators as $operator) {
+                //     // Check if the query parameter exists and is not empty
+                //     if (isset($query) && !empty($query)) {
+                //         // Adjust the condition based on the operator
+                //         switch ($operator) {
+                //             case 'eq':
+                //                 $eloQuery[] = [$column, '=', $query];
+                //                 break;
+                //             default:
+                //                 break;
+                //         }
+                //     }
+                // }
             }
         }
-
         return $eloQuery;
     }
-
-
 }

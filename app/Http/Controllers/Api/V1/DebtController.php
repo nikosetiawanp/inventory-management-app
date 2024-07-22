@@ -7,6 +7,7 @@ use App\Http\Requests\V1\StoreDebtRequest;
 use App\Http\Requests\V1\UpdateDebtRequest;
 use App\Http\Resources\V1\DebtCollection;
 use App\Http\Resources\V1\DebtResource;
+use App\Http\Services\V1\DebtQuery;
 use App\Models\Debt;
 use Illuminate\Http\Request;
 
@@ -17,27 +18,27 @@ class DebtController extends Controller
      */
     public function index(Request $request)
     {
-        $isPaid = $request->input("isPaid");
-        $amount = $request->input("amount");
+        $filter = new DebtQuery();
+        $queryItems = $filter->transform($request);
+
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
 
-        // GET ALL
-        // return new DebtCollection(
-        //     Debt::whereBetween('invoice.date', [$startDate, $endDate])
-        //         ->with(['contact', 'payments'])
-        //         ->paginate()
-        // );
-
-
-        // GET 
-        return new DebtCollection(
-            Debt::whereHas('invoice', function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('date', [$startDate, $endDate]);
-            })
-                ->with(['contact', 'payments', 'invoice'])
-                ->paginate()
-        );
+        if ($startDate or $endDate) {
+            return new DebtCollection(
+                Debt::whereHas('invoice', function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('date', [$startDate, $endDate]);
+                })
+                    ->with(['contact', 'payments', 'invoice'])
+                    ->paginate()
+            );
+        } else {
+            return new DebtCollection(
+                Debt::where($queryItems)
+                    ->with(['contact', 'payments', 'invoice'])
+                    ->paginate()
+            );
+        }
     }
 
     /**

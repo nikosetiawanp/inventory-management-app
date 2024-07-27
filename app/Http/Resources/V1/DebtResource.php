@@ -17,6 +17,7 @@ class DebtResource extends JsonResource
         return [
             "id" => $this->id,
             "amount" => $this->amount,
+            "type" => $this->type,
             "isPaid" => $this->is_paid,
             "invoiceId" => $this->invoice_id,
             "contactId" => $this->contact_id,

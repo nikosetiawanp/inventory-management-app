@@ -15,20 +15,73 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index(Request $request)
+    // {
+    //     $type = $request->input("type");
+
+    //     if (!isset($type)) {
+    //         return new ContactCollection(Contact::all());
+    //     } else {
+    //         return new ContactCollection(Contact::where('type', $type)
+    //             ->with(['debts' => function ($query) {
+    //                 $query->where('is_paid', false);
+    //             }])
+    //             ->get());
+    //     }
+    // }
+
+    // public function index(Request $request)
+    // {
+    //     $type = $request->input("type");
+
+    //     if (!isset($type)) {
+    //         return new ContactCollection(Contact::all());
+    //     } else {
+    //         return new ContactCollection(Contact::where('type', $type)
+    //             ->with(['debts' => function ($query) {
+    //                 $query->with(['payments']); // Include all payments
+    //             }])
+    //             ->whereHas('debts.payments', function ($query) {
+    //                 $query->where('is_paid', false); // Filter debts with unpaid payments
+    //             })
+    //             ->get());
+    //     }
+    // }
+
+    // public function index(Request $request)
+    // {
+    //     $type = $request->input("type");
+
+    //     if (!isset($type)) {
+    //         return new ContactCollection(Contact::all());
+    //     } else {
+    //         return new ContactCollection(Contact::where('type', $type)
+    //             ->with([
+    //                 'debts' => function ($query) {
+    //                     $query->with(['payments'])
+    //                         ->whereHas(
+    //                             'payments',
+    //                             function ($query) {
+    //                                 $query->where('is_paid', false);
+    //                             }
+    //                         );
+    //                 }
+
+    //             ])
+    //             ->with(['debts.payments']) // Ensure all payments are included
+    //             ->get());
+    //     }
+    // }
+
     public function index(Request $request)
     {
         $type = $request->input("type");
-
-        if (!isset($type)) {
-            return new ContactCollection(Contact::all());
-        } else {
-            return new ContactCollection(Contact::where('type', $type)
-                ->with(['debts' => function ($query) {
-                    $query->where('is_paid', false);
-                }])
-                ->get());
-        }
+        return new ContactCollection(Contact::where('type', $type)
+            ->with(['debts.payments'])
+            ->get());
     }
+
+
 
     /**
      * Show the form for creating a new resource.

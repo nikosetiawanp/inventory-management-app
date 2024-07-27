@@ -20,9 +20,38 @@ class DebtController extends Controller
     {
         $filter = new DebtQuery();
         $queryItems = $filter->transform($request);
-
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
+        $upToDate = $request->input("upToDate");
+
+        if ($upToDate) {
+            $totalAmount = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
+                ->where('invoices.date', '<=', $upToDate)
+                ->sum('debts.amount');
+
+            // $results = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
+            //     ->where('invoices.date', '<=', $upToDate)
+            //     ->groupBy('debts.contact_id')
+            //     ->selectRaw('debts.contact_id, SUM(debts.amount) as total_amount')
+            //     ->get();
+            $results = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
+                ->join('contacts', 'debts.contact_id', '=', 'contacts.id')
+                ->where('invoices.date', '<=', $upToDate)
+                ->groupBy('debts.contact_id', 'contacts.name')
+                ->selectRaw('debts.contact_id, contacts.name, SUM(debts.amount) as total_debt')
+                ->get();
+
+            return $results;
+
+            // return Debt::sum('amount');
+            // $debts = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
+            //     ->where('invoices.date', '<=', $upToDate)
+            //     ->with(['contact', 'invoice'])
+            //     ->select('debts.*')
+            //     ->get();
+
+            // return new DebtCollection($debts);
+        }
 
         if ($startDate or $endDate) {
             return new DebtCollection(
@@ -39,6 +68,18 @@ class DebtController extends Controller
                     ->paginate()
             );
         }
+    }
+
+    public function getDebtsUpToDate()
+    {
+        return [];
+
+        // return new DebtCollection(
+        //     Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
+        //         ->where('invoices.date', '<=', $date)
+        //         ->select('debts.*')
+        //         ->get()
+        // );
     }
 
     /**

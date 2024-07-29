@@ -9,7 +9,10 @@ use App\Http\Resources\V1\DebtCollection;
 use App\Http\Resources\V1\DebtResource;
 use App\Http\Services\V1\DebtQuery;
 use App\Models\Debt;
+use App\Models\Contact;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class DebtController extends Controller
 {
@@ -22,35 +25,100 @@ class DebtController extends Controller
         $queryItems = $filter->transform($request);
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
-        $upToDate = $request->input("upToDate");
+        $yearMonth = $request->input("yearMonth");
 
-        if ($upToDate) {
-            $totalAmount = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
-                ->where('invoices.date', '<=', $upToDate)
-                ->sum('debts.amount');
+        if ($yearMonth) {
+            $yearMonth = request()->query('yearMonth'); // '2024-07'
+            $startOfMonth = Carbon::parse($yearMonth . '-01')->startOfMonth();
+            $endOfMonth = Carbon::parse($yearMonth . '-01')->endOfMonth();
+            $endOfPreviousMonth = Carbon::parse($yearMonth . '-01')->subMonth()->endOfMonth();
 
-            // $results = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
-            //     ->where('invoices.date', '<=', $upToDate)
-            //     ->groupBy('debts.contact_id')
-            //     ->selectRaw('debts.contact_id, SUM(debts.amount) as total_amount')
-            //     ->get();
-            $results = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
-                ->join('contacts', 'debts.contact_id', '=', 'contacts.id')
-                ->where('invoices.date', '<=', $upToDate)
-                ->groupBy('debts.contact_id', 'contacts.name')
-                ->selectRaw('debts.contact_id, contacts.name, SUM(debts.amount) as total_debt')
-                ->get();
+            $initialBalances = Contact::leftJoin('debts', 'contacts.id', '=', 'debts.contact_id')
+                ->leftJoin('invoices', 'debts.invoice_id', '=', 'invoices.id')
+                ->leftJoin('payments', function ($join) use ($endOfPreviousMonth) {
+                    $join->on('debts.id', '=', 'payments.debt_id')
+                        ->where('payments.date', '<=', $endOfPreviousMonth);
+                })
+                ->where(function ($query) use ($endOfPreviousMonth) {
+                    $query->where('invoices.date', '<=', $endOfPreviousMonth)
+                        ->orWhereNull('invoices.date');
+                })
+                ->groupBy('contacts.id')
+                ->selectRaw(
+                    'contacts.id as contactId,
+         contacts.name as name,
+         COALESCE(SUM(debts.amount), 0) as totalDebtUpToLastMonth,
+         COALESCE(SUM(payments.amount), 0) as totalPaymentUpToLastMonth'
+                )
+                ->get()
+                ->keyBy('contactId');
+
+            $results = Contact::leftJoin('debts', 'contacts.id', '=', 'debts.contact_id')
+                ->leftJoin('invoices', 'debts.invoice_id', '=', 'invoices.id')
+                ->leftJoin('payments', function ($join) use ($startOfMonth, $endOfMonth) {
+                    $join->on('debts.id', '=', 'payments.debt_id')
+                        ->whereBetween('payments.date', [$startOfMonth, $endOfMonth]);
+                })
+                ->where(function ($query) use ($startOfMonth, $endOfMonth) {
+                    $query->whereBetween('invoices.date', [$startOfMonth, $endOfMonth])
+                        ->orWhereNull('invoices.date');
+                })
+                ->groupBy('contacts.id')
+                ->selectRaw(
+                    'contacts.id as contactId,
+         contacts.name as name,
+         COALESCE(SUM(debts.amount), 0) as totalDebtThisMonth,
+         COALESCE(SUM(payments.amount), 0) as totalPaymentThisMonth'
+                )
+                ->get()
+                ->map(function ($item) use ($initialBalances) {
+                    $initialBalance = 0;
+
+                    if (isset($initialBalances[$item->contactId])) {
+                        $initialBalance = $initialBalances[$item->contactId]->totalDebtUpToLastMonth
+                            - $initialBalances[$item->contactId]->totalPaymentUpToLastMonth;
+                    }
+
+                    $item->initialBalance = $initialBalance;
+                    $item->currentBalance = $initialBalance
+                        + $item->totalDebtThisMonth
+                        - $item->totalPaymentThisMonth;
+
+                    return [
+                        'contactId' => $item->contactId,
+                        'name' => $item->name,
+                        'id' => $item->contactId,
+                        'initialBalance' => $item->initialBalance,
+                        'totalPayment' => $item->totalPaymentThisMonth,
+                        'totalDebt' => $item->totalDebtThisMonth,
+                        'currentBalance' => $item->currentBalance,
+                    ];
+                });
 
             return $results;
-
-            // return Debt::sum('amount');
-            // $debts = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
-            //     ->where('invoices.date', '<=', $upToDate)
-            //     ->with(['contact', 'invoice'])
-            //     ->select('debts.*')
+            // $yearMonth = request()->query('yearMonth');
+            // $upToDateEndOfMonth = Carbon::parse($yearMonth . '-01')->endOfMonth()->toDateString(); //convert 2024-07 to 2024-07-31
+            // $results = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
+            //     ->join('contacts', 'debts.contact_id', '=', 'contacts.id')
+            //     ->leftJoin('payments', function ($join) use ($upToDateEndOfMonth) {
+            //         $join->on('debts.id', '=', 'payments.debt_id')
+            //             ->where('payments.date', '<=', $upToDateEndOfMonth);
+            //     })
+            //     ->where('invoices.date', '<=', $upToDateEndOfMonth)
+            //     ->groupBy('debts.contact_id', 'contacts.id')
+            //     ->selectRaw(
+            //         'debts.contact_id as contactId,
+            //          contacts.name as name,
+            //          contacts.id,
+            //          SUM(debts.amount) as totalDebt,
+            //          SUM(payments.amount) as totalPayment'
+            //     )
+            //     // ->with(['payments' => function ($query) use ($upToDateEndOfMonth) {
+            //     //     $query->where('date', '<=', $upToDateEndOfMonth);
+            //     // }])
             //     ->get();
 
-            // return new DebtCollection($debts);
+            // return $results;
         }
 
         if ($startDate or $endDate) {

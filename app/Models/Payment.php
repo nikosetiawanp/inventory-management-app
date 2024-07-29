@@ -14,16 +14,15 @@ class Payment extends Model
         "date",
         "amount",
         "debt_id",
-        "account_id"
+        "contact_id"
     ];
 
     public function debt(): BelongsTo
     {
         return $this->belongsTo(Debt::class);
     }
-
-    // public function contact(): BelongsTo
-    // {
-    //     return $this->belongsTo(Contact::class);
-    // }
+    public function contact(): BelongsTo
+    {
+        return $this->belongsTo(Contact::class);
+    }
 }

@@ -19,7 +19,9 @@ class PaymentResource extends JsonResource
             "date" => $this->date,
             "amount" => $this->amount,
             "debtId" => $this->debt_id,
+            "contactId" => $this->contact_id,
             "debt" => new DebtResource($this->whenLoaded("debt")),
+            "contact" => new ContactResource($this->whenLoaded("contact")),
         ];
     }
 }

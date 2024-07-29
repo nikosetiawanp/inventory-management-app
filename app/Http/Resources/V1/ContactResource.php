@@ -25,6 +25,7 @@ class ContactResource extends JsonResource
             'address' => $this->address,
             'type' => $this->type,
             "debts" => DebtResource::collection($this->whenLoaded("debts")),
+            "payments" => PaymentResource::collection($this->whenLoaded("payments")),
         ];
     }
 }

@@ -25,12 +25,14 @@ class StorePaymentRequest extends FormRequest
             "date" => ["required"],
             "amount" => ["required"],
             "debtId" => ["required"],
+            "contactId" => ["required"]
         ];
     }
     protected function prepareForValidation()
     {
         $this->merge([
             "debt_id" => $this->debtId,
+            "contact_id" => $this->contactId
         ]);
     }
 }

@@ -16,7 +16,11 @@ return new class extends Migration
             $table->decimal('date');
             $table->decimal('amount');
             $table->string('debt_id');
+            $table->string('contact_id');
             $table->timestamps();
+
+            $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('cascade');
+            $table->foreign('debt_id')->references('id')->on('debts')->onDelete('cascade');
         });
     }
 

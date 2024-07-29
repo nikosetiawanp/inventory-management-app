@@ -24,4 +24,9 @@ class Contact extends Model
     {
         return $this->hasMany(Debt::class);
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

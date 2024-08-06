@@ -21,165 +21,172 @@ class DebtController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function getMonthlyDebts(Request $request)
+    {
+        $type = $request->input("type");
+        $startDate = $request->input("startDate"); // Expecting 'YYYY-MM-DD'
+        $endDate = $request->input("endDate"); // Expecting 'YYYY-MM-DD'
+        $contactIds = $request->input("contactId"); // Expecting an array of contact IDs
+
+        $contactsQuery = Contact::where('type', $type);
+
+        if ($contactIds) {
+            $contactsQuery->whereIn('id', $contactIds); // Use whereIn for multiple IDs
+        }
+
+        if (!$startDate || !$endDate) {
+            return [];
+        }
+
+        $contacts = $contactsQuery->get();
+
+        $monthlyReport = $contacts->map(function ($contact) use ($startDate, $endDate) {
+            // Filter debts and payments for the specified date range
+            $debtsThisMonth = $contact->debts->filter(function ($debt) use ($startDate, $endDate) {
+                return $debt->invoice->date <= $endDate && $debt->invoice->date >= $startDate;
+            })->map(function ($debt) {
+                return [
+                    'id' => $debt->id,
+                    'amount' => $debt->amount,
+                    'createdAt' => $debt->created_at,
+                    'type' => 'D',
+                    'date' => $debt->invoice->date,
+                ];
+            });
+
+            $paymentsThisMonth = $contact->payments->filter(function ($payment) use ($startDate, $endDate) {
+                return $payment->date <= $endDate && $payment->date >= $startDate;
+            })->map(function ($payment) {
+                return [
+                    'id' => $payment->id,
+                    'amount' => $payment->amount,
+                    'createdAt' => $payment->created_at,
+                    'type' => 'P',
+                    'date' => $payment->date,
+                ];
+            });
+
+            // Combine debts and payments into one array
+            $transactionsThisMonth = $debtsThisMonth->merge($paymentsThisMonth)->sortBy('date')->values()->toArray();
+
+            // Filter debts and payments up to the start date
+            $debtsUpToLastMonth = $contact->debts->filter(function ($debt) use ($startDate) {
+                return $debt->invoice->date < $startDate;
+            });
+            $paymentsUpToLastMonth = $contact->payments->filter(function ($payment) use ($startDate) {
+                return $payment->date < $startDate;
+            });
+
+            // Calculate totals
+            $initialBalance = $debtsUpToLastMonth->sum('amount') - $paymentsUpToLastMonth->sum('amount');
+            $totalDebts = $debtsThisMonth->sum('amount');
+            $totalPayments = $paymentsThisMonth->sum('amount');
+            $currentBalance = $initialBalance + ($totalDebts - $totalPayments);
+
+            // Return the formatted contact data
+            return [
+                'id' => $contact->id,
+                'name' => $contact->name,
+                'code' => $contact->code,
+                'initialBalance' => $initialBalance,
+                'totalDebt' => $totalDebts,
+                'totalPayment' => $totalPayments,
+                'currentBalance' => $currentBalance,
+                'histories' => $transactionsThisMonth,
+            ];
+        });
+
+        return $monthlyReport;
+    }
+
+
+    // public function getMonthlyDebts(Request $request)
+    // {
+    //     $type = $request->input("type");
+    //     $yearMonth = $request->input("yearMonth");
+    //     $contactIds = $request->input("contactId"); // Expecting an array of contact IDs
+
+    //     // Convert YYYY-MM to YYYY-MM-DD (last day of the month)
+    //     $lastDayOfMonth = date('Y-m-t', strtotime($yearMonth . '-01'));
+    //     $lastMonth = date('Y-m', strtotime($yearMonth . '-01 -1 month'));
+
+    //     // Get the last day of the previous month
+    //     $lastDayOfLastMonth = date('Y-m-t', strtotime($lastMonth . '-01'));
+
+    //     $contactsQuery = Contact::where('type', $type);
+
+    //     if ($contactIds) {
+    //         $contactsQuery->whereIn('id', $contactIds); // Use whereIn for multiple IDs
+    //     }
+
+    //     $contacts = $contactsQuery->get();
+
+    //     $monthlyReport = $contacts->map(function ($contact) use ($lastDayOfMonth, $lastDayOfLastMonth) {
+    //         // Filter debts and payments for the current month
+    //         $debtsThisMonth = $contact->debts->filter(function ($debt) use ($lastDayOfMonth) {
+    //             return $debt->invoice->date <= $lastDayOfMonth && $debt->invoice->date >= date('Y-m-01', strtotime($lastDayOfMonth));
+    //         })->map(function ($debt) {
+    //             return [
+    //                 'id' => $debt->id,
+    //                 'amount' => $debt->amount,
+    //                 'createdAt' => $debt->created_at,
+    //                 'type' => 'D',
+    //                 'date' => $debt->invoice->date,
+    //             ];
+    //         });
+
+    //         $paymentsThisMonth = $contact->payments->filter(function ($payment) use ($lastDayOfMonth) {
+    //             return $payment->date <= $lastDayOfMonth && $payment->date >= date('Y-m-01', strtotime($lastDayOfMonth));
+    //         })->map(function ($payment) {
+    //             return [
+    //                 'id' => $payment->id,
+    //                 'amount' => $payment->amount,
+    //                 'createdAt' => $payment->created_at,
+    //                 'type' => 'P',
+    //                 'date' => $payment->date,
+    //             ];
+    //         });
+
+    //         // Combine debts and payments into one array
+    //         $transactionsThisMonth = $debtsThisMonth->merge($paymentsThisMonth)->sortBy('date')->values()->toArray();
+
+    //         // Filter debts and payments up to the end of the last month
+    //         $debtsUpToLastMonth = $contact->debts->filter(function ($debt) use ($lastDayOfLastMonth) {
+    //             return $debt->invoice->date <= $lastDayOfLastMonth;
+    //         });
+    //         $paymentsUpToLastMonth = $contact->payments->filter(function ($payment) use ($lastDayOfLastMonth) {
+    //             return $payment->date <= $lastDayOfLastMonth;
+    //         });
+
+    //         // Calculate totals
+    //         $initialBalance = $debtsUpToLastMonth->sum('amount') - $paymentsUpToLastMonth->sum('amount');
+    //         $totalDebts = $debtsThisMonth->sum('amount');
+    //         $totalPayments = $paymentsThisMonth->sum('amount');
+    //         $currentBalance = $initialBalance + ($totalDebts - $totalPayments);
+
+    //         // Return the formatted contact data
+    //         return [
+    //             'id' => $contact->id,
+    //             'name' => $contact->name,
+    //             'initialBalance' => $initialBalance,
+    //             'totalDebt' => $totalDebts,
+    //             'totalPayment' => $totalPayments,
+    //             'currentBalance' => $currentBalance,
+    //             'histories' => $transactionsThisMonth,
+    //         ];
+    //     });
+
+    //     return $monthlyReport;
+    // }
+
+
     public function index(Request $request)
     {
         $filter = new DebtQuery();
         $queryItems = $filter->transform($request);
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
-        $type = $request->input("type");
-
-        $yearMonth = $request->input("monthYear");
-
-        if ($yearMonth) {
-            // Convert YYYY-MM to YYYY-MM-DD (last day of the month)
-            $lastDayOfMonth = date('Y-m-t', strtotime($yearMonth . '-01'));
-            $lastMonth = date('Y-m', strtotime($yearMonth . '-01 -1 month'));
-
-            // Get the last day of the previous month
-            $lastDayOfLastMonth = date('Y-m-t', strtotime($lastMonth . '-01'));
-
-            $contacts = Contact::where('type', $type)
-                ->with(['debts', 'payments'])
-                ->get()
-                ->map(function ($contact) use ($lastDayOfMonth, $lastDayOfLastMonth) {
-                    // Filter debts and payments for the current month
-                    $debtsThisMonth = $contact->debts->filter(function ($debt) use ($lastDayOfMonth) {
-                        return $debt->invoice->date <= $lastDayOfMonth && $debt->invoice->date >= date('Y-m-01', strtotime($lastDayOfMonth));
-                    });
-                    $paymentsThisMonth = $contact->payments->filter(function ($payment) use ($lastDayOfMonth) {
-                        return $payment->date <= $lastDayOfMonth && $payment->date >= date('Y-m-01', strtotime($lastDayOfMonth));
-                    });
-
-                    // Filter debts and payments up to the end of the last month
-                    $debtsUpToLastMonth = $contact->debts->filter(function ($debt) use ($lastDayOfLastMonth) {
-                        return $debt->invoice->date <= $lastDayOfLastMonth;
-                    });
-                    $paymentsUpToLastMonth = $contact->payments->filter(function ($payment) use ($lastDayOfLastMonth) {
-                        return $payment->date <= $lastDayOfLastMonth;
-                    });
-
-                    // Calculate totals
-                    $initialBalance = $debtsUpToLastMonth->sum('amount') - $paymentsUpToLastMonth->sum('amount');
-                    $totalDebts = $debtsThisMonth->sum('amount');
-                    $totalPayments = $paymentsThisMonth->sum('amount');
-                    $currentBalance = $initialBalance + ($totalDebts - $totalPayments);
-
-                    // Return the formatted contact data
-                    return [
-                        'id' => $contact->id,
-                        'name' => $contact->name,
-                        'initialBalance' => $initialBalance,
-                        'totalDebts' => $totalDebts,
-                        'totalPayments' => $totalPayments,
-                        'currentBalance' => $currentBalance,
-                    ];
-                });
-
-            return $contacts;
-
-
-            // --------------------------------------------------
-
-
-
-            //     $yearMonth = request()->query('yearMonth'); // '2024-07'
-            //     $startOfMonth = Carbon::parse($yearMonth . '-01')->startOfMonth();
-            //     $endOfMonth = Carbon::parse($yearMonth . '-01')->endOfMonth();
-            //     $endOfPreviousMonth = Carbon::parse($yearMonth . '-01')->subMonth()->endOfMonth();
-
-            //     $initialBalances = Contact::leftJoin('debts', 'contacts.id', '=', 'debts.contact_id')
-            //         ->leftJoin('invoices', 'debts.invoice_id', '=', 'invoices.id')
-            //         ->leftJoin('payments', function ($join) use ($endOfPreviousMonth) {
-            //             $join->on('debts.id', '=', 'payments.debt_id')
-            //                 ->where('payments.date', '<=', $endOfPreviousMonth);
-            //         })
-            //         ->where(function ($query) use ($endOfPreviousMonth) {
-            //             $query->where('invoices.date', '<=', $endOfPreviousMonth)
-            //                 ->orWhereNull('invoices.date');
-            //         })
-            //         ->groupBy('contacts.id')
-            //         ->selectRaw(
-            //             'contacts.id as contactId,
-            //  contacts.name as name,
-            //  COALESCE(SUM(debts.amount), 0) as totalDebtUpToLastMonth,
-            //  COALESCE(SUM(payments.amount), 0) as totalPaymentUpToLastMonth'
-            //         )
-            //         ->get()
-            //         ->keyBy('contactId');
-
-            //     $results = Contact::leftJoin('debts', 'contacts.id', '=', 'debts.contact_id')
-            //         ->leftJoin('invoices', 'debts.invoice_id', '=', 'invoices.id')
-            //         ->leftJoin('payments', function ($join) use ($startOfMonth, $endOfMonth) {
-            //             $join->on('debts.id', '=', 'payments.debt_id')
-            //                 ->whereBetween('payments.date', [$startOfMonth, $endOfMonth]);
-            //         })
-            //         ->where(function ($query) use ($startOfMonth, $endOfMonth) {
-            //             $query->whereBetween('invoices.date', [$startOfMonth, $endOfMonth])
-            //                 ->orWhereNull('invoices.date');
-            //         })
-            //         ->groupBy('contacts.id')
-            //         ->selectRaw(
-            //             'contacts.id as contactId,
-            //  contacts.name as name,
-            //  COALESCE(SUM(debts.amount), 0) as totalDebtThisMonth,
-            //  COALESCE(SUM(payments.amount), 0) as totalPaymentThisMonth'
-            //         )
-            //         ->get()
-            //         ->map(function ($item) use ($initialBalances) {
-            //             $initialBalance = 0;
-
-            //             if (isset($initialBalances[$item->contactId])) {
-            //                 $initialBalance = $initialBalances[$item->contactId]->totalDebtUpToLastMonth
-            //                     - $initialBalances[$item->contactId]->totalPaymentUpToLastMonth;
-            //             }
-
-            //             $item->initialBalance = $initialBalance;
-            //             $item->currentBalance = $initialBalance
-            //                 + $item->totalDebtThisMonth
-            //                 - $item->totalPaymentThisMonth;
-
-            //             return [
-            //                 'contactId' => $item->contactId,
-            //                 'name' => $item->name,
-            //                 'id' => $item->contactId,
-            //                 'initialBalance' => $item->initialBalance,
-            //                 'totalPayment' => $item->totalPaymentThisMonth,
-            //                 'totalDebt' => $item->totalDebtThisMonth,
-            //                 'currentBalance' => $item->currentBalance,
-            //             ];
-            //         });
-
-            //     return $results;
-
-
-            // --------------------------------------------------
-
-
-            // $yearMonth = request()->query('yearMonth');
-            // $upToDateEndOfMonth = Carbon::parse($yearMonth . '-01')->endOfMonth()->toDateString(); //convert 2024-07 to 2024-07-31
-            // $results = Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
-            //     ->join('contacts', 'debts.contact_id', '=', 'contacts.id')
-            //     ->leftJoin('payments', function ($join) use ($upToDateEndOfMonth) {
-            //         $join->on('debts.id', '=', 'payments.debt_id')
-            //             ->where('payments.date', '<=', $upToDateEndOfMonth);
-            //     })
-            //     ->where('invoices.date', '<=', $upToDateEndOfMonth)
-            //     ->groupBy('debts.contact_id', 'contacts.id')
-            //     ->selectRaw(
-            //         'debts.contact_id as contactId,
-            //          contacts.name as name,
-            //          contacts.id,
-            //          SUM(debts.amount) as totalDebt,
-            //          SUM(payments.amount) as totalPayment'
-            //     )
-            //     // ->with(['payments' => function ($query) use ($upToDateEndOfMonth) {
-            //     //     $query->where('date', '<=', $upToDateEndOfMonth);
-            //     // }])
-            //     ->get();
-
-            // return $results;
-        }
 
         if ($startDate or $endDate) {
             return new DebtCollection(

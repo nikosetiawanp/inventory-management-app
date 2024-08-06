@@ -77,7 +77,7 @@ class ContactController extends Controller
     {
         $type = $request->input("type");
         return new ContactCollection(Contact::where('type', $type)
-            ->with(['debts.payments'])
+            // ->with(['debts.payments'])
             ->get());
     }
 

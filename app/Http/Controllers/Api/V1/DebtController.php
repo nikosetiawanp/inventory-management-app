@@ -22,7 +22,7 @@ class DebtController extends Controller
      * Display a listing of the resource.
      */
 
-    public function getMonthlyDebts(Request $request)
+    public function getDebtHistory(Request $request)
     {
         $type = $request->input("type");
         $startDate = $request->input("startDate"); // Expecting 'YYYY-MM-DD'

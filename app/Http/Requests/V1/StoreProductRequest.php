@@ -26,7 +26,6 @@ class StoreProductRequest extends FormRequest
             "code" => ["required"],
             "name" => ["required"],
             "unit" => ["required", Rule::in(['kg', 'pcs'])],
-            "quantity" => ["required"]
         ];
     }
 }

@@ -28,14 +28,12 @@ class UpdateProductRequest extends FormRequest
                 "code" => ["required"],
                 "name" => ["required"],
                 "unit" => ["required", Rule::in(['kg', 'pcs'])],
-                "quantity" => ["required"]
             ];
         } else {
             return [
                 "code" => ["sometimes", "required"],
                 "name" => ["sometimes", "required"],
                 "unit" => ["sometimes", "required", Rule::in(['kg', 'pcs'])],
-                "quantity" => ["sometimes" => "required"]
             ];
         }
     }

@@ -19,7 +19,7 @@ class ProductResource extends JsonResource
             'code' => $this->code,
             'name' => $this->name,
             'unit' => $this->unit,
-            'quantity' => $this->quantity
+            "inventoryItems" => InventoryItemResource::collection($this->whenLoaded("inventoryItems")),
         ];
     }
 }

@@ -42,22 +42,13 @@ class InventoryItemController extends Controller
         })->toArray();
 
         // Get product IDs from the bulk request
-        $productIds = array_column($request->all(), 'productId');
 
         // Retrieve products in bulk from the database
-        $products = Product::whereIn('id', $productIds)->get();
 
         // Create a new InventoryItem for each item in the bulk request
-        $inventoryItems = collect($request->all())->map(function ($item) use ($commonFields, $products) {
+        $inventoryItems = collect($request->all())->map(function ($item) use ($commonFields) {
             // Get the associated product
-            $product = $products->where('id', $item['productId'])->first();
 
-            // Increment the quantity of the product
-            $product->quantity += $item['quantity'];
-            $product->save();
-
-            // Retrieve the updated quantity
-            $updatedQuantity = $product->fresh()->quantity;
 
             // Merge common fields with item-specific fields
             $itemFields = array_merge($commonFields, [

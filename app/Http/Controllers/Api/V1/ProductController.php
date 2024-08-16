@@ -17,6 +17,10 @@ class ProductController extends Controller
         $startDate = $request->input('startDate'); // Expecting 'YYYY-MM-DD'
         $endDate = $request->input('endDate'); // Expecting 'YYYY-MM-DD'
 
+        if (!$startDate || !$endDate) {
+            return [];
+        }
+
         $products = Product::with(['inventoryItems.inventory'])->get()->map(function ($product) use ($startDate, $endDate) {
             // Calculate initialQuantity: sum of all inventoryItems quantities before startDate
             $initialQuantity = $product->inventoryItems->filter(function ($item) use ($startDate) {
@@ -32,8 +36,8 @@ class ProductController extends Controller
                 return $item->inventory->date >= $startDate && $item->inventory->date <= $endDate;
             });
 
-            // Calculate currentQuantity based on filtered inventory type
-            $currentQuantity = $filteredItems->reduce(function ($carry, $item) {
+            // Calculate currentQuantity based on filtered inventory type, or set to initialQuantity if no items are found
+            $currentQuantity = $filteredItems->isEmpty() ? $initialQuantity : $filteredItems->reduce(function ($carry, $item) {
                 return $item->inventory->type === 'A'
                     ? $carry + $item->quantity
                     : $carry - $item->quantity;
@@ -58,27 +62,22 @@ class ProductController extends Controller
                     'unit' => $product->unit,
                     'initialQuantity' => $product->initialQuantity, // Include initialQuantity
                     'currentQuantity' => $product->currentQuantity, // Include currentQuantity
-                    'inventoryItems' => $product->inventoryItems->map(function ($item) {
+                    'history' => $product->inventoryItems->map(function ($item) {
                         return [
                             'id' => $item->id,
                             'quantity' => $item->quantity,
-                            'productId' => $item->product_id,
-                            'inventoryId' => $item->inventory_id,
-                            'inventory' => [
-                                'id' => $item->inventory->id,
-                                'number' => $item->inventory->number,
-                                'date' => $item->inventory->date,
-                                'type' => $item->inventory->type,
-                                'receiptNumber' => $item->inventory->receipt_number,
-                                'description' => $item->inventory->description,
-                                'transactionId' => $item->inventory->transaction_id,
-                            ],
+                            'number' => $item->inventory->number,
+                            'type' => $item->inventory->type,
+                            'receiptNumber' => $item->inventory->receipt_number,
+                            'date' => $item->inventory->date,
+                            'description' => $item->inventory->description
                         ];
                     }),
                 ];
             }),
         ]);
     }
+
 
 
 

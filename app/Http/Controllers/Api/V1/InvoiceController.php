@@ -15,17 +15,36 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index(Request $request)
+    // {
+    //     $startDate = $request->input("startDate");
+    //     $endDate = $request->input("endDate");
+
+    //     return new InvoiceCollection(
+    //         Invoice::whereBetween('date', [$startDate, $endDate])
+    //             ->with(['transaction.contact', 'inventory', 'debts'])
+    //             ->get()
+    //     );
+    // }
+
     public function index(Request $request)
     {
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
+        $type = $request->input("type"); // Get the transaction type from the request
 
         return new InvoiceCollection(
             Invoice::whereBetween('date', [$startDate, $endDate])
+                ->when($type, function ($query) use ($type) {
+                    $query->whereHas('transaction', function ($query) use ($type) {
+                        $query->where('type', $type);
+                    });
+                })
                 ->with(['transaction.contact', 'inventory', 'debts'])
                 ->get()
         );
     }
+
 
     /**
      * Show the form for creating a new resource.

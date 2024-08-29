@@ -50,7 +50,7 @@ class DebtController extends Controller
                     'id' => $debt->id,
                     'amount' => $debt->amount,
                     'createdAt' => $debt->created_at,
-                    'type' => 'D',
+                    'type' => $debt->type,
                     'date' => $debt->invoice->date,
                 ];
             });
@@ -187,23 +187,26 @@ class DebtController extends Controller
         $queryItems = $filter->transform($request);
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
+        $type = $request->input("type");
 
-        if ($startDate or $endDate) {
-            return new DebtCollection(
-                Debt::whereHas('invoice', function ($query) use ($startDate, $endDate) {
-                    $query->whereBetween('date', [$startDate, $endDate]);
-                })
-                    ->with(['contact', 'payments', 'invoice'])
-                    ->paginate()
-            );
-        } else {
-            return new DebtCollection(
-                Debt::where($queryItems)
-                    ->with(['contact', 'payments', 'invoice'])
-                    ->paginate()
-            );
+        $query = Debt::query();
+
+        if ($startDate || $endDate) {
+            $query->whereHas('invoice', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('date', [$startDate, $endDate]);
+            });
         }
+
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        $query->where($queryItems)
+            ->with(['contact', 'payments', 'invoice']);
+
+        return new DebtCollection($query->paginate());
     }
+
 
     public function getDebtsUpToDate()
     {

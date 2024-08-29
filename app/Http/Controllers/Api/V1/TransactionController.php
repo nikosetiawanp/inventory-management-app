@@ -17,31 +17,6 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index(Request $request)
-    // {
-    //     $startDate = $request->input("startDate");
-    //     $endDate = $request->input("endDate");
-    //     $isApproved = $request->input("isApproved");
-    //     $isDone = $request->input("isDone");
-    //     $type = $request->input("type");
-
-    //     if ($isApproved) {
-    //         return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-    //             ->where('is_approved', $isApproved)
-    //             ->with(['contact', 'inventories'])
-    //             ->get());
-    //     } else if ($isDone) {
-    //     return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-    //         ->where('is_approved', $isApproved)
-    //         ->where('is_done', $isDone)
-    //         ->with(['contact', 'inventories'])
-    //         ->paginate());
-    //     } else {
-    //         return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-    //             ->with(['contact'])
-    //             ->paginate());
-    //     }
-    // }
 
     public function index(Request $request)
     {
@@ -56,27 +31,17 @@ class TransactionController extends Controller
                 Transaction::whereBetween('date', [$startDate, $endDate])
                     ->where($queryItems)
                     ->with(['contact', 'inventories'])
-                    ->orderBy('date', 'asc')
+                    ->orderBy('date', 'desc')
                     ->paginate()
             );
         } else {
             return new TransactionCollection(
                 Transaction::where($queryItems)
                     ->with(['contact', 'inventories'])
-                    ->orderBy('date', 'asc')
+                    ->orderBy('date', 'desc')
                     ->paginate()
             );
         }
-        // if (count($queryItems) == 0) {
-        //     return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-        //         ->with(['contact', 'inventories'])
-        //         ->paginate());
-        // } else {
-        //     return new TransactionCollection(Transaction::whereBetween('date', [$startDate, $endDate])
-        //         ->with(['contact', 'inventories'])
-        //         ->where($queryItems)
-        //         ->paginate());
-        // }
     }
 
     /**

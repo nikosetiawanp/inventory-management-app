@@ -72,11 +72,12 @@ class ProductController extends Controller
                             'date' => $item->inventory->date,
                             'description' => $item->inventory->description
                         ];
-                    }),
+                    })->values(), // Reindex the history array
                 ];
             }),
         ]);
     }
+
 
 
 

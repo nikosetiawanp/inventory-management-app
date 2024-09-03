@@ -34,7 +34,9 @@ class InvoiceController extends Controller
         $type = $request->input("type"); // Get the transaction type from the request
 
         return new InvoiceCollection(
-            Invoice::whereBetween('date', [$startDate, $endDate])
+            Invoice::when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('date', [$startDate, $endDate]);
+            })
                 ->when($type, function ($query) use ($type) {
                     $query->whereHas('transaction', function ($query) use ($type) {
                         $query->where('type', $type);
@@ -44,6 +46,7 @@ class InvoiceController extends Controller
                 ->get()
         );
     }
+
 
 
     /**

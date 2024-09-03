@@ -30,16 +30,16 @@ class TransactionController extends Controller
             return new TransactionCollection(
                 Transaction::whereBetween('date', [$startDate, $endDate])
                     ->where($queryItems)
-                    ->with(['contact', 'inventories'])
+                    ->with(['contact', 'transactionItems.product', 'inventories'])
                     ->orderBy('date', 'desc')
-                    ->paginate()
+                    ->get()
             );
         } else {
             return new TransactionCollection(
                 Transaction::where($queryItems)
-                    ->with(['contact', 'inventories'])
+                    ->with(['contact', 'transactionItems.product', 'inventories'])
                     ->orderBy('date', 'desc')
-                    ->paginate()
+                    ->get()
             );
         }
     }

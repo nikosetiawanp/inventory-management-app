@@ -43,20 +43,6 @@ class TransactionQuery
                     default:
                         break;
                 }
-
-                // foreach ($operators as $operator) {
-                //     // Check if the query parameter exists and is not empty
-                //     if (isset($query) && !empty($query)) {
-                //         // Adjust the condition based on the operator
-                //         switch ($operator) {
-                //             case 'eq':
-                //                 $eloQuery[] = [$column, '=', $query];
-                //                 break;
-                //             default:
-                //                 break;
-                //         }
-                //     }
-                // }
             }
         }
         return $eloQuery;

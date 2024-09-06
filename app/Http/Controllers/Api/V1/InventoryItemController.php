@@ -22,7 +22,7 @@ class InventoryItemController extends Controller
     {
         $inventoryId = $request->input("inventoryId");
         return new InventoryItemCollection(InventoryItem::where('inventory_id', $inventoryId)
-            ->with(['product'])
+            ->with(['product', 'transactionItem'])
             ->get());
     }
 
@@ -55,6 +55,7 @@ class InventoryItemController extends Controller
                 'quantity' => $item['quantity'],
                 'inventory_id' => $item['inventoryId'],
                 'product_id' => $item['productId'],
+                'transaction_item_id' => $item['transactionItemId']
             ]);
 
             // Create and return the new InventoryItem
@@ -78,14 +79,12 @@ class InventoryItemController extends Controller
         $product->quantity += $request->input('quantity');
         $product->save();
 
-        // Retrieve the updated quantity
-        $updatedQuantity = $product->fresh()->quantity;
-
         // Create a new InventoryItem with the correct stockAfter value
         $inventoryItem = InventoryItem::create([
             'quantity' => $request->input('quantity'),
             'inventory_id' => $request->input('inventoryId'),
             'product_id' => $request->input('productId'),
+            'transaction_item_id' => $request->input('transactionItemId')
         ]);
 
         // Respond with the new InventoryItem

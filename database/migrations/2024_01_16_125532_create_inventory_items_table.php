@@ -16,10 +16,12 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('inventory_id');
             $table->string('product_id');
+            $table->string('transaction_item_id');
             $table->timestamps();
 
             $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('transaction_item_id')->references('id')->on('transaction_items')->onDelete('cascade');
         });
     }
 

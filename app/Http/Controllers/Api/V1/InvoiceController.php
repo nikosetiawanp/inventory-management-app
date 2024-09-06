@@ -42,7 +42,13 @@ class InvoiceController extends Controller
                         $query->where('type', $type);
                     });
                 })
-                ->with(['transaction.contact', 'inventory', 'debts'])
+                ->with([
+                    'transaction.contact',
+                    'transaction.transactionItems.inventoryItems',
+                    'transaction.transactionItems.product',
+                    'inventory',
+                    'debts'
+                ])
                 ->get()
         );
     }

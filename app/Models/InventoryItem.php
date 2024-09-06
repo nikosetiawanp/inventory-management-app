@@ -13,7 +13,8 @@ class InventoryItem extends Model
     protected $fillable = [
         "quantity",
         "inventory_id",
-        "product_id"
+        "product_id",
+        "transaction_item_id"
     ];
 
     public function product(): BelongsTo
@@ -24,5 +25,9 @@ class InventoryItem extends Model
     public function inventory(): BelongsTo
     {
         return $this->belongsTo(Inventory::class);
+    }
+    public function transactionItem(): BelongsTo
+    {
+        return $this->belongsTo(TransactionItem::class);
     }
 }

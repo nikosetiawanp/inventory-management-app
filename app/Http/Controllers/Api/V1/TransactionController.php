@@ -29,14 +29,28 @@ class TransactionController extends Controller
             return new TransactionCollection(
                 Transaction::whereBetween('date', [$startDate, $endDate])
                     ->where($queryItems)
-                    ->with(['contact', 'transactionItems.product', 'inventories.inventoryItems', 'invoices.transaction'])
+                    ->with([
+                        'contact',
+                        'transactionItems.product',
+                        // 'inventories.inventoryItems',
+                        'invoices.transaction.transactionItems.product',
+                        'invoices.inventory.inventoryItems.transactionItem.product',
+                        'invoices.transaction.contact'
+                    ])
                     ->orderBy('date', 'desc')
                     ->get()
             );
         } else {
             return new TransactionCollection(
                 Transaction::where($queryItems)
-                    ->with(['contact', 'transactionItems.product', 'inventories.inventoryItems', 'invoices.transaction'])
+                    ->with([
+                        'contact',
+                        'transactionItems.product',
+                        // 'inventories.inventoryItems',
+                        'invoices.transaction.transactionItems.product',
+                        'invoices.inventory.inventoryItems.transactionItem.product',
+                        'invoices.transaction.contact'
+                    ])
                     ->orderBy('date', 'desc')
                     ->get()
             );

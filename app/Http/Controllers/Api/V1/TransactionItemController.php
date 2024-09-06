@@ -21,7 +21,7 @@ class TransactionItemController extends Controller
     {
         $transactionId = $request->input("transactionId");
         return new TransactionItemCollection(TransactionItem::where('transaction_id', $transactionId)
-            ->with(['product'])
+            ->with(['product', 'inventoryItems'])
             ->get());
     }
 

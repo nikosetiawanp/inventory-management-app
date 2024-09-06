@@ -19,9 +19,11 @@ class InventoryItemResource extends JsonResource
             "quantity" => $this->quantity,
             "productId" => $this->product_id,
             "inventoryId" => $this->inventory_id,
+            "transactionItemId" => $this->transaction_item_id,
 
             "product" => new ProductResource($this->whenLoaded("product")),
             "inventory" => new InventoryResource($this->whenLoaded("inventory")),
+            "transactionItem" => new TransactionItemResource($this->whenLoaded("transactionItem")),
         ];
     }
 }

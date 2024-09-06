@@ -24,6 +24,7 @@ class TransactionItemResource extends JsonResource
             "productId" => $this->product_id,
 
             "product" => new ProductResource($this->whenLoaded("product")),
+            "inventoryItems" => InventoryItemResource::collection($this->whenLoaded("inventoryItems")),
         ];
     }
 }

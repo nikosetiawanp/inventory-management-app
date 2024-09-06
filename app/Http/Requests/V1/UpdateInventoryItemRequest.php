@@ -27,12 +27,14 @@ class UpdateInventoryItemRequest extends FormRequest
                 "quantity" => ["required"],
                 "inventoryId" => ["required"],
                 "productId" => ["required"],
+                "transactionItemId" => ["required"]
             ];
         } else {
             return [
                 "quantity" => ["sometimes"],
                 "inventoryId" => ["sometimes"],
                 "productId" => ["sometimes"],
+                "transactionItemId" => ["required"]
             ];
         }
     }
@@ -41,6 +43,7 @@ class UpdateInventoryItemRequest extends FormRequest
         $this->merge([
             "inventory_id" => $this->inventoryId,
             "product_id" => $this->productId,
+            "transaction_item_id" => $this->transactionItemId
         ]);
     }
 }

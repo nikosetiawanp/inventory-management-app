@@ -25,6 +25,7 @@ class BulkStoreInventoryItemRequest extends FormRequest
             "*.quantity" => ["required", "integer"],
             "*.inventoryId" => ["required"],
             "*.productId" => ["required"],
+            "*.transactionItemId" => ["required"]
         ];
     }
 
@@ -34,6 +35,7 @@ class BulkStoreInventoryItemRequest extends FormRequest
         foreach ($this->toArray() as $obj) {
             $obj["inventory_id"] = $obj["inventoryId"] ?? null;
             $obj["product_id"] = $obj["productId"] ?? null;
+            $obj["transaction_item_id"] = $obj["transactionItemId"] ?? null;
 
             $data[] = $obj;
         }

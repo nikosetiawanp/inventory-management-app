@@ -25,6 +25,7 @@ class StoreInventoryItemRequest extends FormRequest
             "quantity" => ["required"],
             "inventoryId" => ["required"],
             "productId" => ["required"],
+            "transactionItemId" => ["required"]
         ];
     }
 
@@ -33,6 +34,7 @@ class StoreInventoryItemRequest extends FormRequest
         $this->merge([
             "inventory_id" => $this->inventoryId,
             "product_id" => $this->productId,
+            "transaction_item_id" => $this->transactionItemId
         ]);
     }
 }

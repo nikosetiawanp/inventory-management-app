@@ -25,7 +25,8 @@ class TransactionResource extends JsonResource
             "contactId" => $this->contact_id,
             "contact" => new ContactResource($this->whenLoaded("contact")),
             "transactionItems" => TransactionItemResource::collection($this->whenLoaded("transactionItems")),
-            "inventories" => InventoryItemResource::collection($this->whenLoaded("inventories"))
+            "inventories" => InventoryItemResource::collection($this->whenLoaded("inventories")),
+            "invoices" => InvoiceResource::collection($this->whenLoaded(("invoices")))
         ];
     }
 }

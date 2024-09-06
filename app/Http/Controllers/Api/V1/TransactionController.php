@@ -25,19 +25,18 @@ class TransactionController extends Controller
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
 
-
         if ($startDate or $endDate) {
             return new TransactionCollection(
                 Transaction::whereBetween('date', [$startDate, $endDate])
                     ->where($queryItems)
-                    ->with(['contact', 'transactionItems.product', 'inventories'])
+                    ->with(['contact', 'transactionItems.product', 'inventories.inventoryItems', 'invoices.transaction'])
                     ->orderBy('date', 'desc')
                     ->get()
             );
         } else {
             return new TransactionCollection(
                 Transaction::where($queryItems)
-                    ->with(['contact', 'transactionItems.product', 'inventories'])
+                    ->with(['contact', 'transactionItems.product', 'inventories.inventoryItems', 'invoices.transaction'])
                     ->orderBy('date', 'desc')
                     ->get()
             );

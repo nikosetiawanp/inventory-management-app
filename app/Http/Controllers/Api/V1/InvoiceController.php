@@ -44,9 +44,8 @@ class InvoiceController extends Controller
                 })
                 ->with([
                     'transaction.contact',
-                    'transaction.transactionItems.inventoryItems',
-                    'transaction.transactionItems.product',
-                    'inventory',
+                    'inventory.inventoryItems.product',
+                    'inventory.inventoryItems.transactionItem',
                     'debts'
                 ])
                 ->get()

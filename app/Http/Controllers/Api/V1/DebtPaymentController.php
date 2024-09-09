@@ -41,7 +41,8 @@ class DebtPaymentController extends Controller
      */
     public function store(StoreDebtPaymentRequest $request)
     {
-        return new DebtPaymentResource(DebtPayment::create($request->all()));
+        return $request->date;
+        // return new DebtPaymentResource(DebtPayment::create($request->all()));
     }
 
     /**

@@ -24,7 +24,7 @@ class StoreCashRequest extends FormRequest
         return [
             "date" => ["required"],
             "number" => ["required"],
-            "description" => ["nullable"],
+            "description" => ["required"],
             "amount" => ["required"],
             "accountId" => ["required"]
         ];

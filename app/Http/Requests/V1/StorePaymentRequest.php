@@ -3,6 +3,8 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
 
 class StorePaymentRequest extends FormRequest
 {
@@ -24,15 +26,19 @@ class StorePaymentRequest extends FormRequest
         return [
             "date" => ["required"],
             "amount" => ["required"],
+            "number" => ["required"],
             "debtId" => ["required"],
-            "contactId" => ["required"]
+            "contactId" => ["required"],
+            "accountId" => [Rule::in([1, 2])],
+            "description" => ["required"],
         ];
     }
     protected function prepareForValidation()
     {
         $this->merge([
             "debt_id" => $this->debtId,
-            "contact_id" => $this->contactId
+            "contact_id" => $this->contactId,
+            "account_id" => $this->accountId,
         ]);
     }
 }

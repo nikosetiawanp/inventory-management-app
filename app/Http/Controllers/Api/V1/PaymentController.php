@@ -10,6 +10,9 @@ use App\Http\Resources\V1\PaymentResource;
 use App\Models\Payment;
 use App\Models\Cash;
 use Illuminate\Http\Request;
+use App\Models\Debt;
+use App\Models\Account;
+
 
 class PaymentController extends Controller
 {
@@ -36,23 +39,51 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(StorePaymentRequest $request)
     {
-        return new PaymentResource(Payment::create($request->all()));
-        // try {
-        //     $payment = Payment::create($request->all());
-        //     Cash::create([
-        //         'date' => $request->date,
-        //         'number' => $request->number,
-        //         'amount' => $request->amount,
-        //         'description' => $request->description,
-        //         'account_id' => $request->accountId
-        //     ]);
-        //     return new PaymentResource($payment);
-        // } catch (\Exception $e) {
-        //     logger()->error('Error creating cash record: ' . $e->getMessage());
-        //     return response()->json(['message' => 'ERROR'], 500);
-        // }
+        $debt = Debt::find($request->debtId);
+        $type = $debt->type;
+
+        $debtAccount = Account::find(1);
+        $receivableAccount = Account::find(2);
+
+        // Create accounts only if they do not exist
+        if (!$debtAccount) {
+            $debtAccount = Account::create([
+                'id' => "1",
+                'number' => '21.10.10',
+                'name' => 'Hutang Dagang',
+            ]);
+            $debtAccount->save();
+        }
+
+        if (!$receivableAccount) {
+            $receivableAccount = Account::create([
+                'id' => "2",
+                'number' => '11.21.20',
+                'name' => 'Piutang Dagang',
+            ]);
+            $receivableAccount->save();
+        }
+
+        // Prepare data for Payment and Cash
+        $data = [
+            'date' => $request->date,
+            'amount' => $request->amount,
+            'number' => $request->number,
+            'cash_number' => $request->number,
+            'debt_id' => $request->debtId,
+            'account_id' => $type == 'D' ? 1 : 2,
+            'contact_id' => $request->contactId,
+            'description' => $request->description,
+        ];
+
+        // Create Payment
+        Payment::create($data);
+
+        // Create Cash (make sure Cash model has auto-incrementing id)
+        Cash::create($data);
     }
 
     /**

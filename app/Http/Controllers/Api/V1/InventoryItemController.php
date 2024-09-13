@@ -124,6 +124,8 @@ class InventoryItemController extends Controller
      */
     public function destroy(InventoryItem $inventoryItem)
     {
-        //
+        if ($inventoryItem) {
+            $inventoryItem->delete();
+        }
     }
 }

@@ -207,19 +207,6 @@ class DebtController extends Controller
         return new DebtCollection($query->paginate());
     }
 
-
-    public function getDebtsUpToDate()
-    {
-        return [];
-
-        // return new DebtCollection(
-        //     Debt::join('invoices', 'debts.invoice_id', '=', 'invoices.id')
-        //         ->where('invoices.date', '<=', $date)
-        //         ->select('debts.*')
-        //         ->get()
-        // );
-    }
-
     /**
      * Show the form for creating a new resource.
      */

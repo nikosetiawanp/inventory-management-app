@@ -56,7 +56,8 @@ class AccountController extends Controller
      */
     public function update(UpdateAccountRequest $request, Account $account)
     {
-        //
+        $account->update($request->all());
+        return new AccountResource($account);
     }
 
     /**

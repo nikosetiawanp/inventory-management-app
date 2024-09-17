@@ -25,12 +25,12 @@ class UpdateAccountRequest extends FormRequest
 
         if ($method === "PUT") {
             return [
-                "code" => ["required"],
+                "number" => ["required"],
                 "name" => ["required"]
             ];
         } else {
             return [
-                "code" => ["sometimes"],
+                "number" => ["sometimes"],
                 "name" => ["sometimes"]
             ];
         }

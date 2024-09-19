@@ -22,14 +22,16 @@ class InventoryController extends Controller
         $type = $request->input("type");
         $transactionId = $request->input("transactionId");
 
-        if ($request->has('transactionId')) {
-            return new InventoryCollection(Inventory::where('transaction_id', $transactionId)
-                ->with(['inventoryItems', 'invoices'])
-                ->get());
-        } else {
+        if ($startDate or $endDate) {
             return new InventoryCollection(Inventory::whereBetween('date', [$startDate, $endDate])
                 ->where('type', $type)
-                ->with(['transaction.contact', 'transaction.transactionItems.product', 'inventoryItems', 'invoices'])
+                ->with(['transaction.contact', 'transaction.transactionItems.product', 'inventoryItems.transactionItem.product', 'invoices'])
+                ->orderBy('date', 'desc')
+                ->get());
+        } else {
+            return new InventoryCollection(Inventory::where('type', $type)
+                ->with(['transaction.contact', 'transaction.transactionItems.product', 'inventoryItems.transactionItem.product', 'invoices'])
+                ->orderBy('date', 'desc')
                 ->get());
         }
     }

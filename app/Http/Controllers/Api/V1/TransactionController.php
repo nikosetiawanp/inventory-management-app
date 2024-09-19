@@ -32,7 +32,6 @@ class TransactionController extends Controller
                     ->with([
                         'contact',
                         'transactionItems.product',
-                        // 'inventories.inventoryItems',
                         'invoices.transaction.transactionItems.product',
                         'invoices.inventory.inventoryItems.transactionItem.product',
                         'invoices.transaction.contact'
@@ -46,7 +45,6 @@ class TransactionController extends Controller
                     ->with([
                         'contact',
                         'transactionItems.product',
-                        // 'inventories.inventoryItems',
                         'invoices.transaction.transactionItems.product',
                         'invoices.inventory.inventoryItems.transactionItem.product',
                         'invoices.transaction.contact'

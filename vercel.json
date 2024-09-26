@@ -1,16 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "public/index.php",
-      "use": "vercel-php"  
-    }
-  ],
   "routes": [
     {
       "src": "/(.*)",
       "dest": "public/index.php"
     }
-  ],
-  "buildCommand": "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && composer install --no-dev && php artisan migrate --force"
+  ]
 }

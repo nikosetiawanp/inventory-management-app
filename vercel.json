@@ -3,7 +3,7 @@
   "builds": [
     {
       "src": "public/index.php",
-      "use": "vercel-php"  // You can leave this out to use the default PHP handler
+      "use": "vercel-php"  
     }
   ],
   "routes": [

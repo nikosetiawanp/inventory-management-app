@@ -1,0 +1,48 @@
+# Laravel specific
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+.env
+Homestead.yaml
+Homestead.json
+npm-debug.log
+yarn-error.log
+/public/hot
+/public/mix-manifest.json
+/.vagrant
+/.idea
+/.vscode
+
+# IDE and editor specific
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.env.local
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Composer
+composer.lock
+
+# Laravel 7+ specific
+/public/storage
+/public/laravel-*.log
+
+# Backup files
+*.bak
+*.swp
+*.tmp
+
+# Compiled View files
+/storage/framework/views/*.php
+
+# Cache files
+/storage/framework/cache/*
+/storage/framework/sessions/*

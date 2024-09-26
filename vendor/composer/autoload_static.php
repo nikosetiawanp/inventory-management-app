@@ -622,6 +622,8 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Http\\Resources\\V1\\TransactionResource' => __DIR__ . '/../..' . '/app/Http/Resources/V1/TransactionResource.php',
         'App\\Http\\Resources\\V1\\VendorCollection' => __DIR__ . '/../..' . '/app/Http/Resources/V1/VendorCollection.php',
         'App\\Http\\Resources\\V1\\VendorResource' => __DIR__ . '/../..' . '/app/Http/Resources/V1/VendorResource.php',
+        'App\\Http\\Services\\V1\\DebtQuery' => __DIR__ . '/../..' . '/app/Http/Services/V1/DebtQuery.php',
+        'App\\Http\\Services\\V1\\TransactionQuery' => __DIR__ . '/../..' . '/app/Http/Services/V1/TransactionQuery.php',
         'App\\Models\\Account' => __DIR__ . '/../..' . '/app/Models/Account.php',
         'App\\Models\\Cash' => __DIR__ . '/../..' . '/app/Models/Cash.php',
         'App\\Models\\Contact' => __DIR__ . '/../..' . '/app/Models/Contact.php',

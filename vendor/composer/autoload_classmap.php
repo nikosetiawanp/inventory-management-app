@@ -100,6 +100,8 @@ return array(
     'App\\Http\\Resources\\V1\\TransactionResource' => $baseDir . '/app/Http/Resources/V1/TransactionResource.php',
     'App\\Http\\Resources\\V1\\VendorCollection' => $baseDir . '/app/Http/Resources/V1/VendorCollection.php',
     'App\\Http\\Resources\\V1\\VendorResource' => $baseDir . '/app/Http/Resources/V1/VendorResource.php',
+    'App\\Http\\Services\\V1\\DebtQuery' => $baseDir . '/app/Http/Services/V1/DebtQuery.php',
+    'App\\Http\\Services\\V1\\TransactionQuery' => $baseDir . '/app/Http/Services/V1/TransactionQuery.php',
     'App\\Models\\Account' => $baseDir . '/app/Models/Account.php',
     'App\\Models\\Cash' => $baseDir . '/app/Models/Cash.php',
     'App\\Models\\Contact' => $baseDir . '/app/Models/Contact.php',

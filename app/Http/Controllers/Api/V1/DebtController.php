@@ -52,6 +52,7 @@ class DebtController extends Controller
                     'createdAt' => $debt->created_at,
                     'type' => $debt->type,
                     'date' => $debt->invoice->date,
+                    'invoiceNumber' => $debt->invoice->number
                 ];
             });
 
@@ -64,6 +65,8 @@ class DebtController extends Controller
                     'createdAt' => $payment->created_at,
                     'type' => 'P',
                     'date' => $payment->date,
+                    'description' => $payment,
+                    'invoiceNumber' => $payment->debt->invoice->number
                 ];
             });
 
@@ -99,86 +102,6 @@ class DebtController extends Controller
 
         return $monthlyReport;
     }
-
-
-    // public function getMonthlyDebts(Request $request)
-    // {
-    //     $type = $request->input("type");
-    //     $yearMonth = $request->input("yearMonth");
-    //     $contactIds = $request->input("contactId"); // Expecting an array of contact IDs
-
-    //     // Convert YYYY-MM to YYYY-MM-DD (last day of the month)
-    //     $lastDayOfMonth = date('Y-m-t', strtotime($yearMonth . '-01'));
-    //     $lastMonth = date('Y-m', strtotime($yearMonth . '-01 -1 month'));
-
-    //     // Get the last day of the previous month
-    //     $lastDayOfLastMonth = date('Y-m-t', strtotime($lastMonth . '-01'));
-
-    //     $contactsQuery = Contact::where('type', $type);
-
-    //     if ($contactIds) {
-    //         $contactsQuery->whereIn('id', $contactIds); // Use whereIn for multiple IDs
-    //     }
-
-    //     $contacts = $contactsQuery->get();
-
-    //     $monthlyReport = $contacts->map(function ($contact) use ($lastDayOfMonth, $lastDayOfLastMonth) {
-    //         // Filter debts and payments for the current month
-    //         $debtsThisMonth = $contact->debts->filter(function ($debt) use ($lastDayOfMonth) {
-    //             return $debt->invoice->date <= $lastDayOfMonth && $debt->invoice->date >= date('Y-m-01', strtotime($lastDayOfMonth));
-    //         })->map(function ($debt) {
-    //             return [
-    //                 'id' => $debt->id,
-    //                 'amount' => $debt->amount,
-    //                 'createdAt' => $debt->created_at,
-    //                 'type' => 'D',
-    //                 'date' => $debt->invoice->date,
-    //             ];
-    //         });
-
-    //         $paymentsThisMonth = $contact->payments->filter(function ($payment) use ($lastDayOfMonth) {
-    //             return $payment->date <= $lastDayOfMonth && $payment->date >= date('Y-m-01', strtotime($lastDayOfMonth));
-    //         })->map(function ($payment) {
-    //             return [
-    //                 'id' => $payment->id,
-    //                 'amount' => $payment->amount,
-    //                 'createdAt' => $payment->created_at,
-    //                 'type' => 'P',
-    //                 'date' => $payment->date,
-    //             ];
-    //         });
-
-    //         // Combine debts and payments into one array
-    //         $transactionsThisMonth = $debtsThisMonth->merge($paymentsThisMonth)->sortBy('date')->values()->toArray();
-
-    //         // Filter debts and payments up to the end of the last month
-    //         $debtsUpToLastMonth = $contact->debts->filter(function ($debt) use ($lastDayOfLastMonth) {
-    //             return $debt->invoice->date <= $lastDayOfLastMonth;
-    //         });
-    //         $paymentsUpToLastMonth = $contact->payments->filter(function ($payment) use ($lastDayOfLastMonth) {
-    //             return $payment->date <= $lastDayOfLastMonth;
-    //         });
-
-    //         // Calculate totals
-    //         $initialBalance = $debtsUpToLastMonth->sum('amount') - $paymentsUpToLastMonth->sum('amount');
-    //         $totalDebts = $debtsThisMonth->sum('amount');
-    //         $totalPayments = $paymentsThisMonth->sum('amount');
-    //         $currentBalance = $initialBalance + ($totalDebts - $totalPayments);
-
-    //         // Return the formatted contact data
-    //         return [
-    //             'id' => $contact->id,
-    //             'name' => $contact->name,
-    //             'initialBalance' => $initialBalance,
-    //             'totalDebt' => $totalDebts,
-    //             'totalPayment' => $totalPayments,
-    //             'currentBalance' => $currentBalance,
-    //             'histories' => $transactionsThisMonth,
-    //         ];
-    //     });
-
-    //     return $monthlyReport;
-    // }
 
 
     public function index(Request $request)

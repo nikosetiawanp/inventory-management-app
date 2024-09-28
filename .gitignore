@@ -46,3 +46,5 @@ composer.lock
 # Cache files
 /storage/framework/cache/*
 /storage/framework/sessions/*
+
+./vendor
